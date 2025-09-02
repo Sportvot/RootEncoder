@@ -85,7 +85,7 @@ class CameraFragment: Fragment(), ConnectChecker {
   private lateinit var txtBitrate: TextView
   val width = 1280
   val height = 720
-  val vBitrate = 4000 * 1000
+  val vBitrate = 1000 * 1000
   private var rotation = 0
   private val sampleRate = 32000
   private val isStereo = true
@@ -95,7 +95,7 @@ class CameraFragment: Fragment(), ConnectChecker {
   private val bitrateAdapter = BitrateAdapter {
     genericStream.setVideoBitrateOnFly(it)
   }.apply {
-    setMaxBitrate(5200 * 1000)
+    setMaxBitrate(2000 * 1000)
   }
 
   @SuppressLint("ClickableViewAccessibility")
