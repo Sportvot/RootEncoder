@@ -347,7 +347,7 @@ public abstract class Camera1Base {
   }
 
   /**
-   * Same to call: rotation = 0; if (Portrait) rotation = 90; prepareVideo(640, 480, 30, 1200 *
+   * Same to call: rotation = 0; if (Portrait) rotation = 90; prepareVideo(1280, 720, 30, 1200 *
    * 1024, false, rotation);
    *
    * @return true if success, false if you get a error (Normally because the encoder selected
@@ -355,7 +355,7 @@ public abstract class Camera1Base {
    */
   public boolean prepareVideo() {
     int rotation = CameraHelper.getCameraOrientation(context);
-    return prepareVideo(640, 480, 30, 1200 * 1024, rotation);
+    return prepareVideo(1280, 720, 30, 1200 * 1024, rotation);
   }
 
   /**

@@ -257,13 +257,13 @@ public abstract class DisplayBase {
    * Same to call:
    * rotation = 0;
    * if (Portrait) rotation = 90;
-   * prepareVideo(640, 480, 30, 1200 * 1024, true, 0);
+   * prepareVideo(1280, 720, 30, 1200 * 1024, true, 0);
    *
    * @return true if success, false if you get a error (Normally because the encoder selected
    * doesn't support any configuration seated or your device hasn't a H264 encoder).
    */
   public boolean prepareVideo() {
-    return prepareVideo(640, 480, 30, 1200 * 1024, 0, 320);
+    return prepareVideo(1280, 720, 30, 1200 * 1024, 0, 320);
   }
 
   /**

@@ -64,8 +64,8 @@ abstract class CommandsManager {
   private var bytesRead = 0
   private var acknowledgementSequence = 0
 
-  protected var width = 640
-  protected var height = 480
+  protected var width = 1280
+  protected var height = 720
   var fps = 30
   protected var sampleRate = 44100
   protected var isStereo = true

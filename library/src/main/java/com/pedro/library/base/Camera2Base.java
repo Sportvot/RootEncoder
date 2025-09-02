@@ -391,14 +391,14 @@ public abstract class Camera2Base {
 
     /**
      * Same to call: isHardwareRotation = true; if (openGlVIew) isHardwareRotation = false;
-     * prepareVideo(640, 480, 30, 1200 * 1024, isHardwareRotation, 90);
+     * prepareVideo(1280, 720, 30, 1200 * 1024, isHardwareRotation, 90);
      *
      * @return true if success, false if you get a error (Normally because the encoder selected
      * doesn't support any configuration seated or your device hasn't a H264 encoder).
      */
     public boolean prepareVideo() {
         int rotation = CameraHelper.getCameraOrientation(context);
-        return prepareVideo(640, 480, 30, 1200 * 1024, rotation);
+        return prepareVideo(1280, 720, 30, 1200 * 1024, rotation);
     }
 
     /**
