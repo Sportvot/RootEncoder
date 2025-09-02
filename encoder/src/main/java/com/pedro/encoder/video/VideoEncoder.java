@@ -77,7 +77,7 @@ public class VideoEncoder extends BaseEncoder implements GetCameraData {
   public VideoEncoder(GetVideoData getVideoData) {
     this.getVideoData = getVideoData;
     typeError = CodecUtil.CodecTypeError.VIDEO_CODEC;
-    type = CodecUtil.H264_MIME;
+    type = CodecUtil.H265_MIME;
     TAG = "VideoEncoder";
   }
 

@@ -206,7 +206,7 @@ class CameraFragment: Fragment(), ConnectChecker {
 
   override fun onConnectionFailed(reason: String) {
     if (genericStream.getStreamClient().reTry(5000, reason, null)) {
-      toast("Retry")
+      toast("Retry: $reason")
     } else {
       genericStream.stopStream()
       bStartStop.setImageResource(R.drawable.stream_icon)

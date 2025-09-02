@@ -64,7 +64,7 @@ open class CommandsManager {
   var videoDisabled = false
   var audioDisabled = false
   private val commandParser = CommandParser()
-  var videoCodec = VideoCodec.H264
+  var videoCodec = VideoCodec.H265
   var audioCodec = AudioCodec.AAC
   //For udp
   val audioClientPorts = arrayOf<Int?>(5000, 5001)
