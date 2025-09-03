@@ -60,6 +60,8 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
   private var currentOrientation: MenuItem? = null
   private var currentFilter: MenuItem? = null
   private var currentResolution: MenuItem? = null
+  private var currentMinBitrate: MenuItem? = null
+  private var currentMaxBitrate: MenuItem? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -75,11 +77,17 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
     val defaultOrientation = menu.findItem(R.id.orientation_horizontal)
     val defaultFilter = menu.findItem(R.id.no_filter)
     val defaultResolution = menu.findItem(R.id.resolution_720p)
+    val defaultMinBitrate = menu.findItem(R.id.min_bitrate_1)
+    val defaultMaxBitrate = menu.findItem(R.id.max_bitrate_2)
     currentVideoSource = defaultVideoSource.updateMenuColor(this, currentVideoSource)
     currentAudioSource = defaultAudioSource.updateMenuColor(this, currentAudioSource)
     currentOrientation = defaultOrientation.updateMenuColor(this, currentOrientation)
     currentFilter = defaultFilter.updateMenuColor(this, currentFilter)
     currentResolution = defaultResolution.updateMenuColor(this, currentResolution)
+    currentMinBitrate = defaultMinBitrate.updateMenuColor(this, currentMinBitrate)
+    currentMaxBitrate = defaultMaxBitrate.updateMenuColor(this, currentMaxBitrate)
+    cameraFragment.setMinBitrateMbps(1)
+    cameraFragment.setMaxBitrateMbps(2)
     return true
   }
 
@@ -144,6 +152,26 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
           currentResolution = item.updateMenuColor(this, currentResolution)
           cameraFragment.setResolution(1920, 1080)
         }
+        R.id.min_bitrate_1 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(1) }
+        R.id.min_bitrate_2 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(2) }
+        R.id.min_bitrate_3 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(3) }
+        R.id.min_bitrate_4 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(4) }
+        R.id.min_bitrate_5 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(5) }
+        R.id.min_bitrate_6 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(6) }
+        R.id.min_bitrate_7 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(7) }
+        R.id.min_bitrate_8 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(8) }
+        R.id.min_bitrate_9 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(9) }
+        R.id.min_bitrate_10 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(10) }
+        R.id.max_bitrate_1 -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(1) }
+        R.id.max_bitrate_2 -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(2) }
+        R.id.max_bitrate_3 -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(3) }
+        R.id.max_bitrate_4 -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(4) }
+        R.id.max_bitrate_5 -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(5) }
+        R.id.max_bitrate_6 -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(6) }
+        R.id.max_bitrate_7 -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(7) }
+        R.id.max_bitrate_8 -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(8) }
+        R.id.max_bitrate_9 -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(9) }
+        R.id.max_bitrate_10 -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(10) }
         else -> {
           val result = filterMenu.onOptionsItemSelected(item, cameraFragment.genericStream.getGlInterface())
           if (result) currentFilter = item.updateMenuColor(this, currentFilter)

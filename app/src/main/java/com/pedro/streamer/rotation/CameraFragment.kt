@@ -85,19 +85,22 @@ class CameraFragment: Fragment(), ConnectChecker {
   private lateinit var bStartStop: ImageView
   private lateinit var txtBitrate: TextView
   private lateinit var txtResolution: TextView
+  private lateinit var txtMinBitrate: TextView
+  private lateinit var txtMaxBitrate: TextView
   var width = 1280
   var height = 720
-  val vBitrate = 1000 * 1000
+  var vBitrate = 1000 * 1000
   private var rotation = 0
   private val sampleRate = 32000
   private val isStereo = true
   private val aBitrate = 128 * 1000
   private var recordPath = ""
+  private var maxBitrate = 2000 * 1000
   //Bitrate adapter used to change the bitrate on fly depend of the bandwidth.
   private val bitrateAdapter = BitrateAdapter {
     genericStream.setVideoBitrateOnFly(it)
   }.apply {
-    setMaxBitrate(2000 * 1000)
+    setMaxBitrate(maxBitrate)
   }
 
   @SuppressLint("ClickableViewAccessibility")
@@ -112,6 +115,8 @@ class CameraFragment: Fragment(), ConnectChecker {
 
     txtBitrate = view.findViewById(R.id.txt_bitrate)
     txtResolution = view.findViewById(R.id.txt_resolution)
+    txtMinBitrate = view.findViewById(R.id.txt_min_bitrate)
+    txtMaxBitrate = view.findViewById(R.id.txt_max_bitrate)
     surfaceView = view.findViewById(R.id.surfaceView)
     (activity as? RotationActivity)?.let {
       surfaceView.setOnTouchListener(it)
@@ -166,6 +171,7 @@ class CameraFragment: Fragment(), ConnectChecker {
       }
     }
     updateResolutionDisplay()
+    updateBitrateLabels()
     return view
   }
 
@@ -190,6 +196,22 @@ class CameraFragment: Fragment(), ConnectChecker {
   private fun updateResolutionDisplay() {
     val verticalLines = min(width, height)
     txtResolution.text = "${verticalLines}p"
+  }
+
+  private fun updateBitrateLabels() {
+    txtMinBitrate.text = "min: ${vBitrate / 1_000_000} Mbps"
+    txtMaxBitrate.text = "max: ${maxBitrate / 1_000_000} Mbps"
+  }
+
+  fun setMinBitrateMbps(mbps: Int) {
+    vBitrate = mbps * 1_000_000
+    updateBitrateLabels()
+  }
+
+  fun setMaxBitrateMbps(mbps: Int) {
+    maxBitrate = mbps * 1_000_000
+    bitrateAdapter.setMaxBitrate(maxBitrate)
+    updateBitrateLabels()
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {

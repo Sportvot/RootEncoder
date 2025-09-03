@@ -76,5 +76,18 @@
   <string name="resolution_480p">480p</string>
   <string name="resolution_720p">720p</string>
   <string name="resolution_1080p">1080p</string>
+  <string name="bitrate">Bitrate</string>
+  <string name="min_bitrate">Min bitrate</string>
+  <string name="max_bitrate">Max bitrate</string>
+  <string name="mbps_1">1 Mbps</string>
+  <string name="mbps_2">2 Mbps</string>
+  <string name="mbps_3">3 Mbps</string>
+  <string name="mbps_4">4 Mbps</string>
+  <string name="mbps_5">5 Mbps</string>
+  <string name="mbps_6">6 Mbps</string>
+  <string name="mbps_7">7 Mbps</string>
+  <string name="mbps_8">8 Mbps</string>
+  <string name="mbps_9">9 Mbps</string>
+  <string name="mbps_10">10 Mbps</string>
 
 </resources>
