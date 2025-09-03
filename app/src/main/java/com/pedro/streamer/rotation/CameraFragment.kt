@@ -218,6 +218,31 @@ class CameraFragment: Fragment(), ConnectChecker {
     updateCodecLabel()
   }
 
+  fun safeSetVideoCodec(codec: VideoCodec): Boolean {
+    val wasOnPreview = genericStream.isOnPreview
+    val previousCodec = currentCodec
+    try {
+      genericStream.release()
+      currentCodec = codec
+      genericStream.setVideoCodec(codec)
+      prepare()
+      if (wasOnPreview) genericStream.startPreview(surfaceView)
+      updateCodecLabel()
+      return true
+    } catch (_: Exception) {
+      // revert
+      try {
+        genericStream.release()
+        currentCodec = previousCodec
+        genericStream.setVideoCodec(previousCodec)
+        prepare()
+        if (wasOnPreview) genericStream.startPreview(surfaceView)
+      } catch (_: Exception) {}
+      updateCodecLabel()
+      return false
+    }
+  }
+
   fun setMinBitrateMbps(mbps: Int) {
     vBitrate = mbps * 1_000_000
     updateBitrateLabels()

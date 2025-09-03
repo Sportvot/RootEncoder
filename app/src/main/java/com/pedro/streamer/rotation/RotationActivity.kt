@@ -186,12 +186,22 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
           cameraFragment.setResolution(1920, 1080)
         }
         R.id.codec_h264 -> {
-          currentCodec = item.updateMenuColor(this, currentCodec)
-          cameraFragment.setVideoCodec(com.pedro.common.VideoCodec.H264)
+          val prev = currentCodec
+          if (cameraFragment.safeSetVideoCodec(com.pedro.common.VideoCodec.H264)) {
+            currentCodec = item.updateMenuColor(this, currentCodec)
+          } else {
+            toast("H264 not supported")
+            prev?.let { currentCodec = it.updateMenuColor(this, currentCodec) }
+          }
         }
         R.id.codec_h265 -> {
-          currentCodec = item.updateMenuColor(this, currentCodec)
-          cameraFragment.setVideoCodec(com.pedro.common.VideoCodec.H265)
+          val prev = currentCodec
+          if (cameraFragment.safeSetVideoCodec(com.pedro.common.VideoCodec.H265)) {
+            currentCodec = item.updateMenuColor(this, currentCodec)
+          } else {
+            toast("H265 not supported on this device/protocol")
+            prev?.let { currentCodec = it.updateMenuColor(this, currentCodec) }
+          }
         }
         R.id.min_bitrate_1 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(1) }
         R.id.min_bitrate_2 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(2) }
