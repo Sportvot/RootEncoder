@@ -245,6 +245,15 @@ class CameraFragment: Fragment(), ConnectChecker {
 
   fun setMinBitrateMbps(mbps: Int) {
     vBitrate = mbps * 1_000_000
+    if (genericStream.isStreaming) {
+      genericStream.setVideoBitrateOnFly(vBitrate)
+      updateBitrateLabels()
+      return
+    }
+    val wasOnPreview = genericStream.isOnPreview
+    genericStream.release()
+    prepare()
+    if (wasOnPreview) genericStream.startPreview(surfaceView)
     updateBitrateLabels()
   }
 
