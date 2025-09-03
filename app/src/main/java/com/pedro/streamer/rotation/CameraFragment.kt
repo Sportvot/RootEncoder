@@ -208,7 +208,7 @@ class CameraFragment: Fragment(), ConnectChecker {
   }
 
   private fun updateBitrateLabels() {
-    txtMinBitrate.text = "min: ${vBitrate / 1_000_000.0} Mbps"
+    txtMinBitrate.text = "Bitrate: ${vBitrate / 1_000_000.0} Mbps"
     txtMaxBitrate.text = "max: ${maxBitrate / 1_000_000} Mbps"
   }
 
