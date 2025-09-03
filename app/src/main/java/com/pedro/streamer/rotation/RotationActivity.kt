@@ -28,6 +28,8 @@ import android.view.View
 import android.view.View.OnTouchListener
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.scale
 import com.pedro.encoder.input.sources.audio.MicrophoneSource
 import com.pedro.encoder.input.sources.video.BitmapSource
@@ -64,11 +66,37 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
   private var currentMaxBitrate: MenuItem? = null
   private var currentCodec: MenuItem? = null
 
+  private val PERMISSIONS_REQUEST = 1001
+  private val REQUIRED_PERMISSIONS = arrayOf(
+    android.Manifest.permission.CAMERA,
+    android.Manifest.permission.RECORD_AUDIO
+  )
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.rotation_activity)
     fitAppPadding()
-    supportFragmentManager.beginTransaction().add(R.id.container, cameraFragment).commit()
+    if (hasAllPermissions()) {
+      supportFragmentManager.beginTransaction().add(R.id.container, cameraFragment).commit()
+    } else {
+      ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST)
+    }
+  }
+
+  private fun hasAllPermissions(): Boolean {
+    return REQUIRED_PERMISSIONS.all { perm ->
+      ContextCompat.checkSelfPermission(this, perm) == android.content.pm.PackageManager.PERMISSION_GRANTED
+    }
+  }
+
+  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    if (requestCode == PERMISSIONS_REQUEST && hasAllPermissions()) {
+      supportFragmentManager.beginTransaction().replace(R.id.container, cameraFragment).commit()
+    } else if (requestCode == PERMISSIONS_REQUEST) {
+      toast("Camera and Microphone permissions are required")
+      finish()
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
