@@ -88,6 +88,7 @@
             </item>
             <item android:title="@string/max_bitrate">
                 <menu>
+                    <item android:id="@+id/max_bitrate_auto" android:title="@string/max_bitrate_auto" />
                     <item android:id="@+id/max_bitrate_1" android:title="@string/mbps_1" />
                     <item android:id="@+id/max_bitrate_2" android:title="@string/mbps_2" />
                     <item android:id="@+id/max_bitrate_3" android:title="@string/mbps_3" />

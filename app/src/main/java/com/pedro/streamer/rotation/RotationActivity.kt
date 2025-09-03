@@ -223,6 +223,7 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
         R.id.max_bitrate_8 -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(8) }
         R.id.max_bitrate_9 -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(9) }
         R.id.max_bitrate_10 -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(10) }
+        R.id.max_bitrate_auto -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(0) }
         else -> {
           val result = filterMenu.onOptionsItemSelected(item, cameraFragment.genericStream.getGlInterface())
           if (result) currentFilter = item.updateMenuColor(this, currentFilter)
