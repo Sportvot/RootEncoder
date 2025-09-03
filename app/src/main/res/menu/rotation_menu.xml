@@ -70,6 +70,12 @@
             <item android:id="@+id/codec_h265" android:title="@string/h265" />
         </menu>
     </item>
+    <item android:title="@string/bitrate_mode">
+        <menu>
+            <item android:id="@+id/bitrate_mode_vbr" android:title="@string/bitrate_mode_vbr" />
+            <item android:id="@+id/bitrate_mode_cbr" android:title="@string/bitrate_mode_cbr" />
+        </menu>
+    </item>
     <item android:title="@string/bitrate">
         <menu>
             <item android:title="@string/min_bitrate">

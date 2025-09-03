@@ -65,6 +65,7 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
   private var currentMinBitrate: MenuItem? = null
   private var currentMaxBitrate: MenuItem? = null
   private var currentCodec: MenuItem? = null
+  private var currentBitrateMode: MenuItem? = null
 
   private val PERMISSIONS_REQUEST = 1001
   private val REQUIRED_PERMISSIONS = arrayOf(
@@ -109,6 +110,7 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
     val defaultMinBitrate = menu.findItem(R.id.min_bitrate_1)
     val defaultMaxBitrate = menu.findItem(R.id.max_bitrate_2)
     val defaultCodec = menu.findItem(R.id.codec_h264)
+    val defaultBitrateMode = menu.findItem(R.id.bitrate_mode_vbr)
     currentVideoSource = defaultVideoSource.updateMenuColor(this, currentVideoSource)
     currentAudioSource = defaultAudioSource.updateMenuColor(this, currentAudioSource)
     currentOrientation = defaultOrientation.updateMenuColor(this, currentOrientation)
@@ -117,6 +119,7 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
     currentMinBitrate = defaultMinBitrate.updateMenuColor(this, currentMinBitrate)
     currentMaxBitrate = defaultMaxBitrate.updateMenuColor(this, currentMaxBitrate)
     currentCodec = defaultCodec.updateMenuColor(this, currentCodec)
+    currentBitrateMode = defaultBitrateMode.updateMenuColor(this, currentBitrateMode)
     cameraFragment.setMinBitrateMbps(1)
     cameraFragment.setMaxBitrateMbps(2)
     cameraFragment.setVideoCodec(com.pedro.common.VideoCodec.H264)
@@ -197,11 +200,19 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
         R.id.codec_h265 -> {
           val prev = currentCodec
           if (cameraFragment.safeSetVideoCodec(com.pedro.common.VideoCodec.H265)) {
-            currentCodec = item.updateMenuColor(this, currentCodec)
+          currentCodec = item.updateMenuColor(this, currentCodec)
           } else {
             toast("H265 not supported on this device/protocol")
             prev?.let { currentCodec = it.updateMenuColor(this, currentCodec) }
           }
+        }
+        R.id.bitrate_mode_vbr -> {
+          currentBitrateMode = item.updateMenuColor(this, currentBitrateMode)
+          cameraFragment.genericStream.setPreferCbr(false)
+        }
+        R.id.bitrate_mode_cbr -> {
+          currentBitrateMode = item.updateMenuColor(this, currentBitrateMode)
+          cameraFragment.genericStream.setPreferCbr(true)
         }
         R.id.min_bitrate_1 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(1) }
         R.id.min_bitrate_2 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(2) }
