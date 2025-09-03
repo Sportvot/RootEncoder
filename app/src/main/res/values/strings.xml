@@ -72,5 +72,9 @@
   <string name="camera_uvc">CameraUVC</string>
   <string name="bitmap">Bitmap</string>
   <string name="buffer">Buffer</string>
+  <string name="resolution">Resolution</string>
+  <string name="resolution_480p">480p</string>
+  <string name="resolution_720p">720p</string>
+  <string name="resolution_1080p">1080p</string>
 
 </resources>

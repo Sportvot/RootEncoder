@@ -59,6 +59,7 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
   private var currentAudioSource: MenuItem? = null
   private var currentOrientation: MenuItem? = null
   private var currentFilter: MenuItem? = null
+  private var currentResolution: MenuItem? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -73,10 +74,12 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
     val defaultAudioSource = menu.findItem(R.id.audio_source_microphone)
     val defaultOrientation = menu.findItem(R.id.orientation_horizontal)
     val defaultFilter = menu.findItem(R.id.no_filter)
+    val defaultResolution = menu.findItem(R.id.resolution_720p)
     currentVideoSource = defaultVideoSource.updateMenuColor(this, currentVideoSource)
     currentAudioSource = defaultAudioSource.updateMenuColor(this, currentAudioSource)
     currentOrientation = defaultOrientation.updateMenuColor(this, currentOrientation)
     currentFilter = defaultFilter.updateMenuColor(this, currentFilter)
+    currentResolution = defaultResolution.updateMenuColor(this, currentResolution)
     return true
   }
 
@@ -128,6 +131,18 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
         R.id.orientation_vertical -> {
           currentOrientation = item.updateMenuColor(this, currentOrientation)
           cameraFragment.setOrientationMode(true)
+        }
+        R.id.resolution_480p -> {
+          currentResolution = item.updateMenuColor(this, currentResolution)
+          cameraFragment.setResolution(854, 480)
+        }
+        R.id.resolution_720p -> {
+          currentResolution = item.updateMenuColor(this, currentResolution)
+          cameraFragment.setResolution(1280, 720)
+        }
+        R.id.resolution_1080p -> {
+          currentResolution = item.updateMenuColor(this, currentResolution)
+          cameraFragment.setResolution(1920, 1080)
         }
         else -> {
           val result = filterMenu.onOptionsItemSelected(item, cameraFragment.genericStream.getGlInterface())

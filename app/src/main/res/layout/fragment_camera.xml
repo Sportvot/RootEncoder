@@ -32,6 +32,16 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
+  <TextView
+      android:id="@+id/txt_resolution"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@color/appColor"
+      android:layout_marginStart="16dp"
+      app:layout_constraintStart_toEndOf="@id/txt_bitrate"
+      app:layout_constraintTop_toTopOf="@id/txt_bitrate"
+      app:layout_constraintBottom_toBottomOf="@id/txt_bitrate" />
+
   <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

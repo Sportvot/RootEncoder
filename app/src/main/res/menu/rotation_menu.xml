@@ -48,6 +48,22 @@
                 />
         </menu>
     </item>
+    <item android:title="@string/resolution">
+        <menu>
+            <item
+                android:title="@string/resolution_480p"
+                android:id="@+id/resolution_480p"
+                />
+            <item
+                android:title="@string/resolution_720p"
+                android:id="@+id/resolution_720p"
+                />
+            <item
+                android:title="@string/resolution_1080p"
+                android:id="@+id/resolution_1080p"
+                />
+        </menu>
+    </item>
     <item
         android:title="@string/filters"
         >

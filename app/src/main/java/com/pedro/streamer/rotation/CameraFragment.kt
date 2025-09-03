@@ -42,6 +42,7 @@ import com.pedro.streamer.utils.toast
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.math.min
 
 /**
  * Example code to stream using StreamBase. This is the recommend way to use the library.
@@ -83,8 +84,9 @@ class CameraFragment: Fragment(), ConnectChecker {
   private lateinit var surfaceView: SurfaceView
   private lateinit var bStartStop: ImageView
   private lateinit var txtBitrate: TextView
-  val width = 1280
-  val height = 720
+  private lateinit var txtResolution: TextView
+  var width = 1280
+  var height = 720
   val vBitrate = 1000 * 1000
   private var rotation = 0
   private val sampleRate = 32000
@@ -109,6 +111,7 @@ class CameraFragment: Fragment(), ConnectChecker {
     val etUrl = view.findViewById<EditText>(R.id.et_rtp_url)
 
     txtBitrate = view.findViewById(R.id.txt_bitrate)
+    txtResolution = view.findViewById(R.id.txt_resolution)
     surfaceView = view.findViewById(R.id.surfaceView)
     (activity as? RotationActivity)?.let {
       surfaceView.setOnTouchListener(it)
@@ -162,6 +165,7 @@ class CameraFragment: Fragment(), ConnectChecker {
         is CameraXSource -> source.switchCamera()
       }
     }
+    updateResolutionDisplay()
     return view
   }
 
@@ -171,6 +175,21 @@ class CameraFragment: Fragment(), ConnectChecker {
     rotation = if (isVertical) 90 else 0
     prepare()
     if (wasOnPreview) genericStream.startPreview(surfaceView)
+  }
+
+  fun setResolution(newWidth: Int, newHeight: Int) {
+    val wasOnPreview = genericStream.isOnPreview
+    genericStream.release()
+    width = newWidth
+    height = newHeight
+    updateResolutionDisplay()
+    prepare()
+    if (wasOnPreview) genericStream.startPreview(surfaceView)
+  }
+
+  private fun updateResolutionDisplay() {
+    val verticalLines = min(width, height)
+    txtResolution.text = "${verticalLines}p"
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
