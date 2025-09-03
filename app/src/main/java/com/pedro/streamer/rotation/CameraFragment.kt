@@ -89,6 +89,7 @@ class CameraFragment: Fragment(), ConnectChecker {
   private lateinit var txtMinBitrate: TextView
   private lateinit var txtMaxBitrate: TextView
   private lateinit var txtCodec: TextView
+  private lateinit var txtBitrateMode: TextView
   var width = 1280
   var height = 720
   var vBitrate = 1000 * 1000
@@ -99,6 +100,7 @@ class CameraFragment: Fragment(), ConnectChecker {
   private var recordPath = ""
   private var maxBitrate = 0 * 1000
   private var currentCodec: VideoCodec = VideoCodec.H264
+  private var preferCbr: Boolean = false
   //Bitrate adapter used to change the bitrate on fly depend of the bandwidth.
   private val bitrateAdapter = BitrateAdapter {
     genericStream.setVideoBitrateOnFly(it)
@@ -121,6 +123,7 @@ class CameraFragment: Fragment(), ConnectChecker {
     txtMinBitrate = view.findViewById(R.id.txt_min_bitrate)
     txtMaxBitrate = view.findViewById(R.id.txt_max_bitrate)
     txtCodec = view.findViewById(R.id.txt_codec)
+    txtBitrateMode = view.findViewById(R.id.txt_bitrate_mode)
     surfaceView = view.findViewById(R.id.surfaceView)
     (activity as? RotationActivity)?.let {
       surfaceView.setOnTouchListener(it)
@@ -177,6 +180,7 @@ class CameraFragment: Fragment(), ConnectChecker {
     updateResolutionDisplay()
     updateBitrateLabels()
     updateCodecLabel()
+    updateBitrateModeLabel()
     return view
   }
 
@@ -212,6 +216,10 @@ class CameraFragment: Fragment(), ConnectChecker {
     txtCodec.text = currentCodec.name
   }
 
+  private fun updateBitrateModeLabel() {
+    txtBitrateMode.text = if (preferCbr) "CBR" else "VBR"
+  }
+
   fun setVideoCodec(codec: VideoCodec) {
     currentCodec = codec
     genericStream.setVideoCodec(codec)
@@ -220,6 +228,8 @@ class CameraFragment: Fragment(), ConnectChecker {
 
   fun setBitrateMode(preferCbr: Boolean) {
     genericStream.setPreferCbr(preferCbr)
+    this.preferCbr = preferCbr
+    updateBitrateModeLabel()
     if (genericStream.isStreaming) {
       toast("Bitrate mode will apply on next start")
       return
