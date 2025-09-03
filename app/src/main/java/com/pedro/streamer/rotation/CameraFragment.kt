@@ -218,6 +218,18 @@ class CameraFragment: Fragment(), ConnectChecker {
     updateCodecLabel()
   }
 
+  fun setBitrateMode(preferCbr: Boolean) {
+    genericStream.setPreferCbr(preferCbr)
+    if (genericStream.isStreaming) {
+      toast("Bitrate mode will apply on next start")
+      return
+    }
+    val wasOnPreview = genericStream.isOnPreview
+    genericStream.release()
+    prepare()
+    if (wasOnPreview) genericStream.startPreview(surfaceView)
+  }
+
   fun safeSetVideoCodec(codec: VideoCodec): Boolean {
     val wasOnPreview = genericStream.isOnPreview
     val previousCodec = currentCodec

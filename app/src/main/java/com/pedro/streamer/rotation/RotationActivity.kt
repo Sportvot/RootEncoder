@@ -208,11 +208,11 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
         }
         R.id.bitrate_mode_vbr -> {
           currentBitrateMode = item.updateMenuColor(this, currentBitrateMode)
-          cameraFragment.genericStream.setPreferCbr(false)
+          cameraFragment.setBitrateMode(false)
         }
         R.id.bitrate_mode_cbr -> {
           currentBitrateMode = item.updateMenuColor(this, currentBitrateMode)
-          cameraFragment.genericStream.setPreferCbr(true)
+          cameraFragment.setBitrateMode(true)
         }
         R.id.min_bitrate_1 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(1) }
         R.id.min_bitrate_2 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(2) }
