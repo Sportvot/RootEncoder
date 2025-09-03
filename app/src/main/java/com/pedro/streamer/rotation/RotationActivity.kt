@@ -120,6 +120,7 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
     cameraFragment.setMinBitrateMbps(1)
     cameraFragment.setMaxBitrateMbps(2)
     cameraFragment.setVideoCodec(com.pedro.common.VideoCodec.H264)
+    cameraFragment.setResolution(1280, 720)
     return true
   }
 
