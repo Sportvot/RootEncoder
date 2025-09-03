@@ -120,7 +120,7 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
     currentMaxBitrate = defaultMaxBitrate.updateMenuColor(this, currentMaxBitrate)
     currentCodec = defaultCodec.updateMenuColor(this, currentCodec)
     currentBitrateMode = defaultBitrateMode.updateMenuColor(this, currentBitrateMode)
-    cameraFragment.setMinBitrateMbps(1)
+    cameraFragment.setMinBitrateMbps(1.0)
     cameraFragment.setMaxBitrateMbps(0)
     cameraFragment.setVideoCodec(com.pedro.common.VideoCodec.H264)
     cameraFragment.setResolution(1280, 720)
@@ -214,16 +214,16 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
           currentBitrateMode = item.updateMenuColor(this, currentBitrateMode)
           cameraFragment.setBitrateMode(true)
         }
-        R.id.min_bitrate_1 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(1) }
-        R.id.min_bitrate_2 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(2) }
-        R.id.min_bitrate_3 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(3) }
-        R.id.min_bitrate_4 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(4) }
-        R.id.min_bitrate_5 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(5) }
-        R.id.min_bitrate_6 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(6) }
-        R.id.min_bitrate_7 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(7) }
-        R.id.min_bitrate_8 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(8) }
-        R.id.min_bitrate_9 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(9) }
-        R.id.min_bitrate_10 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(10) }
+        R.id.min_bitrate_1 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(0.5) }
+        R.id.min_bitrate_2 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(1.0) }
+        R.id.min_bitrate_3 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(1.5) }
+        R.id.min_bitrate_4 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(2.0) }
+        R.id.min_bitrate_5 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(2.5) }
+        R.id.min_bitrate_6 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(3.0) }
+        R.id.min_bitrate_7 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(3.5) }
+        R.id.min_bitrate_8 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(4.0) }
+        R.id.min_bitrate_9 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(4.5) }
+        R.id.min_bitrate_10 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(5.0) }
         R.id.max_bitrate_1 -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(1) }
         R.id.max_bitrate_2 -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(2) }
         R.id.max_bitrate_3 -> { currentMaxBitrate = item.updateMenuColor(this, currentMaxBitrate); cameraFragment.setMaxBitrateMbps(3) }

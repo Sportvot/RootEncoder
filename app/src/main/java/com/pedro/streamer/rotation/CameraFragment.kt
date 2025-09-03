@@ -208,7 +208,7 @@ class CameraFragment: Fragment(), ConnectChecker {
   }
 
   private fun updateBitrateLabels() {
-    txtMinBitrate.text = "min: ${vBitrate / 1_000_000} Mbps"
+    txtMinBitrate.text = "min: ${vBitrate / 1_000_000.0} Mbps"
     txtMaxBitrate.text = "max: ${maxBitrate / 1_000_000} Mbps"
   }
 
@@ -265,8 +265,8 @@ class CameraFragment: Fragment(), ConnectChecker {
     }
   }
 
-  fun setMinBitrateMbps(mbps: Int) {
-    vBitrate = mbps * 1_000_000
+  fun setMinBitrateMbps(mbps: Double) {
+    vBitrate = (mbps * 1_000_000).toInt()
     if (genericStream.isStreaming) {
       genericStream.setVideoBitrateOnFly(vBitrate)
       updateBitrateLabels()
