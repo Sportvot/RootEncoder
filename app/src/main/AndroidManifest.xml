@@ -43,6 +43,9 @@
         android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
+        <action android:name="android.intent.action.MAIN"/>
+
+        <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
 
@@ -65,13 +68,7 @@
         android:label="@string/app_name"
         android:screenOrientation="fullSensor"
         android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
-        android:exported="true"
-        tools:ignore="DiscouragedApi" >
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity>
+        tools:ignore="DiscouragedApi" />
 
     <service android:name="com.pedro.streamer.screen.ScreenService"
         android:foregroundServiceType="mediaProjection|microphone|camera"
