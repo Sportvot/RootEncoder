@@ -26,6 +26,7 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
+import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -76,6 +77,7 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.rotation_activity)
+    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     fitAppPadding()
     if (hasAllPermissions()) {
       supportFragmentManager.beginTransaction().add(R.id.container, cameraFragment).commit()
