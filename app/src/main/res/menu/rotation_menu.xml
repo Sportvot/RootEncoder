@@ -64,6 +64,12 @@
                 />
         </menu>
     </item>
+    <item android:title="@string/codec">
+        <menu>
+            <item android:id="@+id/codec_h264" android:title="@string/h264" />
+            <item android:id="@+id/codec_h265" android:title="@string/h265" />
+        </menu>
+    </item>
     <item android:title="@string/bitrate">
         <menu>
             <item android:title="@string/min_bitrate">

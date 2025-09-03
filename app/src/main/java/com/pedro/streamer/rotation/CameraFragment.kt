@@ -30,6 +30,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.pedro.common.ConnectChecker
+import com.pedro.common.VideoCodec
 import com.pedro.encoder.input.sources.video.Camera1Source
 import com.pedro.encoder.input.sources.video.Camera2Source
 import com.pedro.extrasources.CameraXSource
@@ -87,6 +88,7 @@ class CameraFragment: Fragment(), ConnectChecker {
   private lateinit var txtResolution: TextView
   private lateinit var txtMinBitrate: TextView
   private lateinit var txtMaxBitrate: TextView
+  private lateinit var txtCodec: TextView
   var width = 1280
   var height = 720
   var vBitrate = 1000 * 1000
@@ -96,6 +98,7 @@ class CameraFragment: Fragment(), ConnectChecker {
   private val aBitrate = 128 * 1000
   private var recordPath = ""
   private var maxBitrate = 2000 * 1000
+  private var currentCodec: VideoCodec = VideoCodec.H264
   //Bitrate adapter used to change the bitrate on fly depend of the bandwidth.
   private val bitrateAdapter = BitrateAdapter {
     genericStream.setVideoBitrateOnFly(it)
@@ -117,6 +120,7 @@ class CameraFragment: Fragment(), ConnectChecker {
     txtResolution = view.findViewById(R.id.txt_resolution)
     txtMinBitrate = view.findViewById(R.id.txt_min_bitrate)
     txtMaxBitrate = view.findViewById(R.id.txt_max_bitrate)
+    txtCodec = view.findViewById(R.id.txt_codec)
     surfaceView = view.findViewById(R.id.surfaceView)
     (activity as? RotationActivity)?.let {
       surfaceView.setOnTouchListener(it)
@@ -172,6 +176,7 @@ class CameraFragment: Fragment(), ConnectChecker {
     }
     updateResolutionDisplay()
     updateBitrateLabels()
+    updateCodecLabel()
     return view
   }
 
@@ -201,6 +206,16 @@ class CameraFragment: Fragment(), ConnectChecker {
   private fun updateBitrateLabels() {
     txtMinBitrate.text = "min: ${vBitrate / 1_000_000} Mbps"
     txtMaxBitrate.text = "max: ${maxBitrate / 1_000_000} Mbps"
+  }
+
+  private fun updateCodecLabel() {
+    txtCodec.text = currentCodec.name
+  }
+
+  fun setVideoCodec(codec: VideoCodec) {
+    currentCodec = codec
+    genericStream.setVideoCodec(codec)
+    updateCodecLabel()
   }
 
   fun setMinBitrateMbps(mbps: Int) {

@@ -62,6 +62,7 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
   private var currentResolution: MenuItem? = null
   private var currentMinBitrate: MenuItem? = null
   private var currentMaxBitrate: MenuItem? = null
+  private var currentCodec: MenuItem? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -79,6 +80,7 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
     val defaultResolution = menu.findItem(R.id.resolution_720p)
     val defaultMinBitrate = menu.findItem(R.id.min_bitrate_1)
     val defaultMaxBitrate = menu.findItem(R.id.max_bitrate_2)
+    val defaultCodec = menu.findItem(R.id.codec_h264)
     currentVideoSource = defaultVideoSource.updateMenuColor(this, currentVideoSource)
     currentAudioSource = defaultAudioSource.updateMenuColor(this, currentAudioSource)
     currentOrientation = defaultOrientation.updateMenuColor(this, currentOrientation)
@@ -86,8 +88,10 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
     currentResolution = defaultResolution.updateMenuColor(this, currentResolution)
     currentMinBitrate = defaultMinBitrate.updateMenuColor(this, currentMinBitrate)
     currentMaxBitrate = defaultMaxBitrate.updateMenuColor(this, currentMaxBitrate)
+    currentCodec = defaultCodec.updateMenuColor(this, currentCodec)
     cameraFragment.setMinBitrateMbps(1)
     cameraFragment.setMaxBitrateMbps(2)
+    cameraFragment.setVideoCodec(com.pedro.common.VideoCodec.H264)
     return true
   }
 
@@ -151,6 +155,14 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
         R.id.resolution_1080p -> {
           currentResolution = item.updateMenuColor(this, currentResolution)
           cameraFragment.setResolution(1920, 1080)
+        }
+        R.id.codec_h264 -> {
+          currentCodec = item.updateMenuColor(this, currentCodec)
+          cameraFragment.setVideoCodec(com.pedro.common.VideoCodec.H264)
+        }
+        R.id.codec_h265 -> {
+          currentCodec = item.updateMenuColor(this, currentCodec)
+          cameraFragment.setVideoCodec(com.pedro.common.VideoCodec.H265)
         }
         R.id.min_bitrate_1 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(1) }
         R.id.min_bitrate_2 -> { currentMinBitrate = item.updateMenuColor(this, currentMinBitrate); cameraFragment.setMinBitrateMbps(2) }
