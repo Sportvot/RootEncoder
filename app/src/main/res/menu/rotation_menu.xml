@@ -78,35 +78,31 @@
     </item>
     <item android:title="@string/bitrate">
         <menu>
-            <item android:title="@string/min_bitrate">
-                <menu>
-                    <item android:id="@+id/min_bitrate_1" android:title="@string/mbps_1" />
-                    <item android:id="@+id/min_bitrate_2" android:title="@string/mbps_2" />
-                    <item android:id="@+id/min_bitrate_3" android:title="@string/mbps_3" />
-                    <item android:id="@+id/min_bitrate_4" android:title="@string/mbps_4" />
-                    <item android:id="@+id/min_bitrate_5" android:title="@string/mbps_5" />
-                    <item android:id="@+id/min_bitrate_6" android:title="@string/mbps_6" />
-                    <item android:id="@+id/min_bitrate_7" android:title="@string/mbps_7" />
-                    <item android:id="@+id/min_bitrate_8" android:title="@string/mbps_8" />
-                    <item android:id="@+id/min_bitrate_9" android:title="@string/mbps_9" />
-                    <item android:id="@+id/min_bitrate_10" android:title="@string/mbps_10" />
-                </menu>
-            </item>
-            <item android:title="@string/max_bitrate">
-                <menu>
-                    <item android:id="@+id/max_bitrate_auto" android:title="@string/max_bitrate_auto" />
-                    <item android:id="@+id/max_bitrate_1" android:title="@string/mbps_1" />
-                    <item android:id="@+id/max_bitrate_2" android:title="@string/mbps_2" />
-                    <item android:id="@+id/max_bitrate_3" android:title="@string/mbps_3" />
-                    <item android:id="@+id/max_bitrate_4" android:title="@string/mbps_4" />
-                    <item android:id="@+id/max_bitrate_5" android:title="@string/mbps_5" />
-                    <item android:id="@+id/max_bitrate_6" android:title="@string/mbps_6" />
-                    <item android:id="@+id/max_bitrate_7" android:title="@string/mbps_7" />
-                    <item android:id="@+id/max_bitrate_8" android:title="@string/mbps_8" />
-                    <item android:id="@+id/max_bitrate_9" android:title="@string/mbps_9" />
-                    <item android:id="@+id/max_bitrate_10" android:title="@string/mbps_10" />
-                </menu>
-            </item>
+            <item android:id="@+id/min_bitrate_1" android:title="@string/mbps_1" />
+            <item android:id="@+id/min_bitrate_2" android:title="@string/mbps_2" />
+            <item android:id="@+id/min_bitrate_3" android:title="@string/mbps_3" />
+            <item android:id="@+id/min_bitrate_4" android:title="@string/mbps_4" />
+            <item android:id="@+id/min_bitrate_5" android:title="@string/mbps_5" />
+            <item android:id="@+id/min_bitrate_6" android:title="@string/mbps_6" />
+            <item android:id="@+id/min_bitrate_7" android:title="@string/mbps_7" />
+            <item android:id="@+id/min_bitrate_8" android:title="@string/mbps_8" />
+            <item android:id="@+id/min_bitrate_9" android:title="@string/mbps_9" />
+            <item android:id="@+id/min_bitrate_10" android:title="@string/mbps_10" />
+        </menu>
+    </item>
+    <item android:title="@string/max_bitrate" android:visible="false">
+        <menu>
+            <item android:id="@+id/max_bitrate_auto" android:title="@string/max_bitrate_auto" />
+            <item android:id="@+id/max_bitrate_1" android:title="@string/mbps_1" />
+            <item android:id="@+id/max_bitrate_2" android:title="@string/mbps_2" />
+            <item android:id="@+id/max_bitrate_3" android:title="@string/mbps_3" />
+            <item android:id="@+id/max_bitrate_4" android:title="@string/mbps_4" />
+            <item android:id="@+id/max_bitrate_5" android:title="@string/mbps_5" />
+            <item android:id="@+id/max_bitrate_6" android:title="@string/mbps_6" />
+            <item android:id="@+id/max_bitrate_7" android:title="@string/mbps_7" />
+            <item android:id="@+id/max_bitrate_8" android:title="@string/mbps_8" />
+            <item android:id="@+id/max_bitrate_9" android:title="@string/mbps_9" />
+            <item android:id="@+id/max_bitrate_10" android:title="@string/mbps_10" />
         </menu>
     </item>
     <item

@@ -97,7 +97,7 @@ class CameraFragment: Fragment(), ConnectChecker {
   private val isStereo = true
   private val aBitrate = 128 * 1000
   private var recordPath = ""
-  private var maxBitrate = 2000 * 1000
+  private var maxBitrate = 0 * 1000
   private var currentCodec: VideoCodec = VideoCodec.H264
   //Bitrate adapter used to change the bitrate on fly depend of the bandwidth.
   private val bitrateAdapter = BitrateAdapter {

@@ -108,7 +108,7 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
     val defaultFilter = menu.findItem(R.id.no_filter)
     val defaultResolution = menu.findItem(R.id.resolution_720p)
     val defaultMinBitrate = menu.findItem(R.id.min_bitrate_1)
-    val defaultMaxBitrate = menu.findItem(R.id.max_bitrate_2)
+    val defaultMaxBitrate = menu.findItem(R.id.max_bitrate_auto)
     val defaultCodec = menu.findItem(R.id.codec_h264)
     val defaultBitrateMode = menu.findItem(R.id.bitrate_mode_vbr)
     currentVideoSource = defaultVideoSource.updateMenuColor(this, currentVideoSource)
@@ -121,7 +121,7 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
     currentCodec = defaultCodec.updateMenuColor(this, currentCodec)
     currentBitrateMode = defaultBitrateMode.updateMenuColor(this, currentBitrateMode)
     cameraFragment.setMinBitrateMbps(1)
-    cameraFragment.setMaxBitrateMbps(2)
+    cameraFragment.setMaxBitrateMbps(0)
     cameraFragment.setVideoCodec(com.pedro.common.VideoCodec.H264)
     cameraFragment.setResolution(1280, 720)
     return true
