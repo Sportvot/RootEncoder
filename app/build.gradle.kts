@@ -9,7 +9,7 @@ android {
 
   defaultConfig {
     applicationId = "com.pedro.streamer"
-    minSdk = 16
+    minSdk = 19
     targetSdk = 36
     versionCode = project.version.toString().replace(".", "").toInt()
     versionName = project.version.toString()
@@ -39,4 +39,7 @@ dependencies {
   implementation(libs.androidx.constraintlayout)
   implementation(libs.androidx.appcompat)
   implementation(libs.androidx.multidex)
+  implementation(libs.androidx.datastore.preferences)
+  implementation(libs.androidx.datastore)
+  implementation("androidx.webkit:webkit:1.10.0")
 }

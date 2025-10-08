@@ -18,8 +18,11 @@ junit = "4.13.2"
 mockito = "6.0.0"
 uvcandroid = "1.0.9"
 media3 = "1.8.0"
+datastorePreference = "1.1.4"
 
 [libraries]
+androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastorePreference" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreference" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "camerax" }

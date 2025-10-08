@@ -28,14 +28,22 @@ import android.widget.GridView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
 import com.pedro.streamer.file.FromFileActivity
 import com.pedro.streamer.oldapi.OldApiActivity
 import com.pedro.streamer.rotation.RotationActivity
 import com.pedro.streamer.screen.ScreenActivity
+import com.pedro.streamer.studio.DeepLinkParams
 import com.pedro.streamer.utils.ActivityLink
 import com.pedro.streamer.utils.ImageAdapter
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
+import com.pedro.streamer.utils.dataStore
 import com.pedro.streamer.utils.fitAppPadding
 import com.pedro.streamer.utils.toast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,6 +61,10 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+
+    // Parse deep link parameters
+    handleDeepLink(intent)
+
     fitAppPadding()
     transitionAnim(true)
     val tvVersion = findViewById<TextView>(R.id.tv_version)
@@ -151,5 +163,19 @@ class MainActivity : AppCompatActivity() {
       }
     }
     return true
+  }
+
+  private fun handleDeepLink(intent: Intent?) {
+    val params = DeepLinkParams.fromUri(intent?.data)
+    lifecycleScope.launch(Dispatchers.IO) {
+      applicationContext.dataStore.edit { prefs ->
+        params.resolution?.let { prefs[stringPreferencesKey("video_resolution_key")] = it }
+        params.fps?.let { prefs[stringPreferencesKey("video_fps_key")] = it }
+        params.ip?.let { prefs[stringPreferencesKey("srt_server_ip_key")] = it }
+        params.port?.let { prefs[stringPreferencesKey("srt_server_port_key")] = it }
+        params.srtStreamId?.let { prefs[stringPreferencesKey("server_stream_id_key")] = it }
+        params.bitrate?.let { prefs[intPreferencesKey("live_video_bitrate_key")] = it }
+      }
+    }
   }
 }
