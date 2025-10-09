@@ -17,6 +17,7 @@
 package com.pedro.streamer.rotation
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -53,6 +54,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
+import androidx.lifecycle.lifecycleScope
 
 
 /**
@@ -72,6 +75,7 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
   private var currentMaxBitrate: MenuItem? = null
   private var currentCodec: MenuItem? = null
   private var currentBitrateMode: MenuItem? = null
+  private var menu: Menu? = null
 
   private val PERMISSIONS_REQUEST = 1001
   private val REQUIRED_PERMISSIONS = arrayOf(
@@ -90,19 +94,31 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
     val refreshToken = intent.getStringExtra(com.pedro.streamer.studio.StudioConstants.REFRESH_TOKEN_KEY)
     Log.d("RotationActivity", "Received params -> matchId=$matchId, refreshId=$refreshId, refreshToken=${refreshToken?.let { if (it.length > 6) it.take(3)+"***"+it.takeLast(3) else it }}")
 
-    // Read and log values stored by MainActivity.handleDeepLink in DataStore
-    CoroutineScope(Dispatchers.IO).launch {
-      val prefs = applicationContext.dataStore.data.first()
-      val resolution = prefs[stringPreferencesKey("video_resolution_key")]
-      val fps = prefs[stringPreferencesKey("video_fps_key")]
-      val ip = prefs[stringPreferencesKey("srt_server_ip_key")]
-      val port = prefs[stringPreferencesKey("srt_server_port_key")]
-      val streamId = prefs[stringPreferencesKey("server_stream_id_key")]
-      val bitrate = prefs[intPreferencesKey("live_video_bitrate_key")]
-      Log.d(
-        "RotationActivity_data",
-        "DataStore -> resolution=$resolution, fps=$fps, ip=$ip, port=$port, streamId=$streamId, bitrate=$bitrate"
-      )
+    cameraFragment.viewLifecycleOwnerLiveData.observe(this) { owner ->
+      if (owner != null) {
+        lifecycleScope.launch(Dispatchers.Main) {
+          val url = getSrtUrl(applicationContext)
+          val bitrateMbps = getBitrate(applicationContext)
+          val resolutionString = getResolution(applicationContext)
+          
+          if (url.isNotBlank()) cameraFragment.setStreamUrl(url)
+          if (bitrateMbps > 0) {
+            cameraFragment.setMinBitrateMbps(bitrateMbps)
+            updateMinBitrateMenuColor(bitrateMbps)
+          }
+          if (!resolutionString.isNullOrBlank()) {
+            val parts = resolutionString.split("x")
+            if (parts.size == 2) {
+              val width = parts[0].toIntOrNull()
+              val height = parts[1].toIntOrNull()
+              if (width != null && height != null) {
+                cameraFragment.setResolution(width, height)
+                updateResolutionMenuColor(resolutionString)
+              }
+            }
+          }
+        }
+      }
     }
     if (hasAllPermissions()) {
       supportFragmentManager.beginTransaction().add(R.id.container, cameraFragment).commit()
@@ -110,6 +126,81 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
       ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST)
     }
   }
+
+  suspend fun getBitrate(context: Context): Double {
+    return withContext(Dispatchers.IO) {
+      val prefs = context.dataStore.data.first()
+      val intVal = prefs[intPreferencesKey("live_video_bitrate_key")]
+      val mbps: Double =  intVal?.let { it / 1_000.0 }  ?: 0.0
+      mbps
+    }
+  }
+
+  suspend fun getSrtUrl(context: Context): String {
+    return withContext(Dispatchers.IO) {
+      val prefs = context.dataStore.data.first()
+
+      val ip = prefs[stringPreferencesKey("srt_server_ip_key")]
+      val port = prefs[stringPreferencesKey("srt_server_port_key")]
+      val streamId = prefs[stringPreferencesKey("server_stream_id_key")]
+
+      if (ip.isNullOrBlank() || port.isNullOrBlank() || streamId.isNullOrBlank()) {
+        Log.e("SRT_URL", "Missing required parameters: ip=$ip, port=$port, streamId=$streamId")
+        return@withContext ""
+      }
+
+      val url = "srt://$ip:$port?mode=caller&streamid=$streamId"
+      Log.d("SRT_URL", url)
+      url
+    }
+  }
+
+  suspend fun getResolution(context: Context): String? {
+    return withContext(Dispatchers.IO) {
+      val prefs = context.dataStore.data.first()
+      prefs[stringPreferencesKey("video_resolution_key")]
+    }
+  }
+
+  private fun updateMinBitrateMenuColor(bitrateMbps: Double) {
+    menu?.let { menu ->
+      val bitrateValues = arrayOf(0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0)
+      val menuIds = arrayOf(
+        R.id.min_bitrate_1, R.id.min_bitrate_2, R.id.min_bitrate_3, R.id.min_bitrate_4, R.id.min_bitrate_5,
+        R.id.min_bitrate_6, R.id.min_bitrate_7, R.id.min_bitrate_8, R.id.min_bitrate_9, R.id.min_bitrate_10
+      )
+      
+      val index = bitrateValues.indexOf(bitrateMbps)
+      if (index >= 0 && index < menuIds.size) {
+        val menuItem = menu.findItem(menuIds[index])
+        currentMinBitrate = menuItem.updateMenuColor(this, currentMinBitrate)
+      }
+    }
+  }
+
+  private fun updateResolutionMenuColor(resolutionString: String) {
+    menu?.let { menu ->
+      val parts = resolutionString.split("x")
+      if (parts.size == 2) {
+        val width = parts[0].toIntOrNull()
+        val height = parts[1].toIntOrNull()
+        
+        if (width != null && height != null) {
+          val menuItem = when {
+            width == 854 && height == 480 -> menu.findItem(R.id.resolution_480p)
+            width == 1280 && height == 720 -> menu.findItem(R.id.resolution_720p)
+            width == 1920 && height == 1080 -> menu.findItem(R.id.resolution_1080p)
+            else -> null
+          }
+          
+          menuItem?.let {
+            currentResolution = it.updateMenuColor(this, currentResolution)
+          }
+        }
+      }
+    }
+  }
+
 
   private fun hasAllPermissions(): Boolean {
     return REQUIRED_PERMISSIONS.all { perm ->
@@ -128,6 +219,7 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    this.menu = menu
     menuInflater.inflate(R.menu.rotation_menu, menu)
     val defaultVideoSource = menu.findItem(R.id.video_source_camera2)
     val defaultAudioSource = menu.findItem(R.id.audio_source_microphone)

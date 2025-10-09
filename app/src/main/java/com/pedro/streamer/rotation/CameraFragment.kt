@@ -19,6 +19,7 @@ package com.pedro.streamer.rotation
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -90,6 +91,7 @@ class CameraFragment: Fragment(), ConnectChecker {
   private lateinit var txtMaxBitrate: TextView
   private lateinit var txtCodec: TextView
   private lateinit var txtBitrateMode: TextView
+  private lateinit var etUrl: EditText
   var width = 1280
   var height = 720
   var vBitrate = 1000 * 1000
@@ -116,7 +118,7 @@ class CameraFragment: Fragment(), ConnectChecker {
     bStartStop = view.findViewById(R.id.b_start_stop)
     val bRecord = view.findViewById<ImageView>(R.id.b_record)
     val bSwitchCamera = view.findViewById<ImageView>(R.id.switch_camera)
-    val etUrl = view.findViewById<EditText>(R.id.et_rtp_url)
+    etUrl = view.findViewById(R.id.et_rtp_url)
 
     txtBitrate = view.findViewById(R.id.txt_bitrate)
     txtResolution = view.findViewById(R.id.txt_resolution)
@@ -182,6 +184,16 @@ class CameraFragment: Fragment(), ConnectChecker {
     updateCodecLabel()
     updateBitrateModeLabel()
     return view
+  }
+
+  fun setStreamUrl(url: String) {
+    if (this::etUrl.isInitialized) {
+      etUrl.setText(url)
+    }
+  }
+
+  fun getStreamUrl(): String {
+    return if (this::etUrl.isInitialized) etUrl.text.toString() else ""
   }
 
   fun setOrientationMode(isVertical: Boolean) {
