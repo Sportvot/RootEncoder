@@ -36,9 +36,11 @@ import com.pedro.streamer.screen.ScreenActivity
 import com.pedro.streamer.studio.DeepLinkParams
 import com.pedro.streamer.utils.ActivityLink
 import com.pedro.streamer.utils.ImageAdapter
+import android.util.Log
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
+import com.pedro.streamer.studio.StudioConstants
 import com.pedro.streamer.utils.dataStore
 import com.pedro.streamer.utils.fitAppPadding
 import com.pedro.streamer.utils.toast
@@ -95,24 +97,6 @@ class MainActivity : AppCompatActivity() {
   private fun createList() {
     activities.add(
       ActivityLink(
-        Intent(this, OldApiActivity::class.java),
-        getString(R.string.old_api), VERSION_CODES.JELLY_BEAN
-      )
-    )
-    activities.add(
-      ActivityLink(
-        Intent(this, FromFileActivity::class.java),
-        getString(R.string.from_file), VERSION_CODES.JELLY_BEAN_MR2
-      )
-    )
-    activities.add(
-      ActivityLink(
-        Intent(this, ScreenActivity::class.java),
-        getString(R.string.display), VERSION_CODES.LOLLIPOP
-      )
-    )
-    activities.add(
-      ActivityLink(
         Intent(this, RotationActivity::class.java),
         getString(R.string.rotation_rtmp), VERSION_CODES.LOLLIPOP
       )
@@ -127,6 +111,15 @@ class MainActivity : AppCompatActivity() {
           val link = activities[position]
           val minSdk = link.minSdk
           if (Build.VERSION.SDK_INT >= minSdk) {
+            // Attach deep link/session params when navigating to RotationActivity
+            val params = DeepLinkParams.fromUri(intent.data)
+            val matchId = params.matchId ?: intent.getStringExtra(StudioConstants.MATCH_ID_KEY)
+            val refreshId = params.refreshId ?: intent.getStringExtra(StudioConstants.REFRESH_ID_KEY)
+            val refreshToken = params.refreshToken ?: intent.getStringExtra(StudioConstants.REFRESH_TOKEN_KEY)
+            Log.d("MainActivity_TOKENS", "Passing params -> matchId=$matchId, refreshId=$refreshId, refreshToken=${refreshToken?.let { if (it.length > 6) it.take(3)+"***"+it.takeLast(3) else it }}")
+            matchId?.let { link.intent.putExtra(StudioConstants.MATCH_ID_KEY, it) }
+            refreshId?.let { link.intent.putExtra(StudioConstants.REFRESH_ID_KEY, it) }
+            refreshToken?.let { link.intent.putExtra(StudioConstants.REFRESH_TOKEN_KEY, it) }
             startActivity(link.intent)
             transitionAnim(false)
           } else {

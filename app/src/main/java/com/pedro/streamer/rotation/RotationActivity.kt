@@ -32,6 +32,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.scale
+import android.util.Log
 import com.pedro.encoder.input.sources.audio.MicrophoneSource
 import com.pedro.encoder.input.sources.video.BitmapSource
 import com.pedro.encoder.input.sources.video.BufferVideoSource
@@ -79,6 +80,11 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
     setContentView(R.layout.rotation_activity)
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     fitAppPadding()
+    // Log incoming session params from Intent extras
+    val matchId = intent.getStringExtra(com.pedro.streamer.studio.StudioConstants.MATCH_ID_KEY)
+    val refreshId = intent.getStringExtra(com.pedro.streamer.studio.StudioConstants.REFRESH_ID_KEY)
+    val refreshToken = intent.getStringExtra(com.pedro.streamer.studio.StudioConstants.REFRESH_TOKEN_KEY)
+    Log.d("RotationActivity", "Received params -> matchId=$matchId, refreshId=$refreshId, refreshToken=${refreshToken?.let { if (it.length > 6) it.take(3)+"***"+it.takeLast(3) else it }}")
     if (hasAllPermissions()) {
       supportFragmentManager.beginTransaction().add(R.id.container, cameraFragment).commit()
     } else {
