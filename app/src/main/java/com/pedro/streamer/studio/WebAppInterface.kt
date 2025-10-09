@@ -5,9 +5,10 @@ import android.util.Log
 import android.webkit.JavascriptInterface
 import org.json.JSONObject
 import androidx.core.net.toUri
-//import androidx.datastore.preferences.core.edit
-//import androidx.datastore.preferences.core.intPreferencesKey
-//import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
+import com.pedro.streamer.utils.dataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,16 +36,16 @@ class WebAppInterface(private val context: StudioActivity) {
                     intent.putExtra(StudioConstants.MATCH_ID_KEY, matchId)
                     intent.putExtra(StudioConstants.REFRESH_ID_KEY, refreshId)
                     intent.putExtra(StudioConstants.REFRESH_TOKEN_KEY, refreshToken)
-//                    CoroutineScope(Dispatchers.IO).launch {
-//                        context.applicationContext.dataStore.edit { prefs ->
-//                            params.resolution?.let { prefs[stringPreferencesKey("video_resolution_key")] = it }
-//                            params.fps?.let { prefs[stringPreferencesKey("video_fps_key")] = it }
-//                            params.ip?.let { prefs[stringPreferencesKey("srt_server_ip_key")] = it }
-//                            params.port?.let { prefs[stringPreferencesKey("srt_server_port_key")] = it }
-//                            params.srtStreamId?.let { prefs[stringPreferencesKey("server_stream_id_key")] = it }
-//                            params.bitrate?.let { prefs[intPreferencesKey("live_video_bitrate_key")] = it }
-//                        }
-//                    }
+                    CoroutineScope(Dispatchers.IO).launch {
+                        context.applicationContext.dataStore.edit { prefs ->
+                            params.resolution?.let { prefs[stringPreferencesKey("video_resolution_key")] = it }
+                            params.fps?.let { prefs[stringPreferencesKey("video_fps_key")] = it }
+                            params.ip?.let { prefs[stringPreferencesKey("srt_server_ip_key")] = it }
+                            params.port?.let { prefs[stringPreferencesKey("srt_server_port_key")] = it }
+                            params.srtStreamId?.let { prefs[stringPreferencesKey("server_stream_id_key")] = it }
+                            params.bitrate?.let { prefs[intPreferencesKey("live_video_bitrate_key")] = it }
+                        }
+                    }
                 }
                 context.startActivity(intent)
             }

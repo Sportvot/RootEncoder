@@ -33,6 +33,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.scale
 import android.util.Log
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.pedro.encoder.input.sources.audio.MicrophoneSource
 import com.pedro.encoder.input.sources.video.BitmapSource
 import com.pedro.encoder.input.sources.video.BufferVideoSource
@@ -42,6 +44,7 @@ import com.pedro.extrasources.CameraUvcSource
 import com.pedro.extrasources.CameraXSource
 import com.pedro.streamer.R
 import com.pedro.streamer.utils.FilterMenu
+import com.pedro.streamer.utils.dataStore
 import com.pedro.streamer.utils.fitAppPadding
 import com.pedro.streamer.utils.toast
 import com.pedro.streamer.utils.updateMenuColor
@@ -49,6 +52,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
 
 
 /**
@@ -85,6 +89,21 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
     val refreshId = intent.getStringExtra(com.pedro.streamer.studio.StudioConstants.REFRESH_ID_KEY)
     val refreshToken = intent.getStringExtra(com.pedro.streamer.studio.StudioConstants.REFRESH_TOKEN_KEY)
     Log.d("RotationActivity", "Received params -> matchId=$matchId, refreshId=$refreshId, refreshToken=${refreshToken?.let { if (it.length > 6) it.take(3)+"***"+it.takeLast(3) else it }}")
+
+    // Read and log values stored by MainActivity.handleDeepLink in DataStore
+    CoroutineScope(Dispatchers.IO).launch {
+      val prefs = applicationContext.dataStore.data.first()
+      val resolution = prefs[stringPreferencesKey("video_resolution_key")]
+      val fps = prefs[stringPreferencesKey("video_fps_key")]
+      val ip = prefs[stringPreferencesKey("srt_server_ip_key")]
+      val port = prefs[stringPreferencesKey("srt_server_port_key")]
+      val streamId = prefs[stringPreferencesKey("server_stream_id_key")]
+      val bitrate = prefs[intPreferencesKey("live_video_bitrate_key")]
+      Log.d(
+        "RotationActivity_data",
+        "DataStore -> resolution=$resolution, fps=$fps, ip=$ip, port=$port, streamId=$streamId, bitrate=$bitrate"
+      )
+    }
     if (hasAllPermissions()) {
       supportFragmentManager.beginTransaction().add(R.id.container, cameraFragment).commit()
     } else {
