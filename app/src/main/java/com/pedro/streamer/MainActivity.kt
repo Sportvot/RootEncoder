@@ -26,6 +26,8 @@ import android.os.Bundle
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.GridView
 import android.widget.TextView
+import android.widget.TableLayout
+import android.widget.TableRow
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
@@ -37,6 +39,7 @@ import com.pedro.streamer.studio.DeepLinkParams
 import com.pedro.streamer.utils.ActivityLink
 import com.pedro.streamer.utils.ImageAdapter
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
@@ -46,6 +49,8 @@ import com.pedro.streamer.utils.fitAppPadding
 import com.pedro.streamer.utils.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.collectLatest
 
 class MainActivity : AppCompatActivity() {
 
@@ -71,10 +76,53 @@ class MainActivity : AppCompatActivity() {
     transitionAnim(true)
     val tvVersion = findViewById<TextView>(R.id.tv_version)
     tvVersion.text = getString(R.string.version, BuildConfig.VERSION_NAME)
+    val table = findViewById<TableLayout>(R.id.table_datastore)
     list = findViewById(R.id.list)
     createList()
     setListAdapter(activities)
     requestPermissions()
+
+    // Observe DataStore and show current values
+    lifecycleScope.launch(Dispatchers.Main) {
+      applicationContext.dataStore.data
+        .map { prefs ->
+          listOf(
+            "Resolution" to (prefs[stringPreferencesKey("video_resolution_key")] ?: "-"),
+            "FPS" to (prefs[stringPreferencesKey("video_fps_key")] ?: "-"),
+            "SRT IP" to (prefs[stringPreferencesKey("srt_server_ip_key")] ?: "-"),
+            "SRT Port" to (prefs[stringPreferencesKey("srt_server_port_key")] ?: "-"),
+            "Stream ID" to (prefs[stringPreferencesKey("server_stream_id_key")] ?: "-"),
+            "Bitrate" to ((prefs[intPreferencesKey("live_video_bitrate_key")]?.toString()) ?: "-")
+          )
+        }
+        .collectLatest { rows ->
+          // Clear previous content except header (index 0)
+          while (table.childCount > 1) table.removeViewAt(1)
+          rows.forEach { (field, value) ->
+            val tr = TableRow(this@MainActivity)
+            val tvField = TextView(this@MainActivity).apply {
+              text = field
+              setTextColor(ContextCompat.getColor(this@MainActivity, R.color.black))
+              gravity = android.view.Gravity.CENTER
+              background = ContextCompat.getDrawable(this@MainActivity, R.drawable.table_cell_background)
+              setPadding(0, 8, 0, 8)
+            }
+            val tvValue = TextView(this@MainActivity).apply {
+              text = value
+              setTextColor(ContextCompat.getColor(this@MainActivity, R.color.black))
+              gravity = android.view.Gravity.CENTER
+              background = ContextCompat.getDrawable(this@MainActivity, R.drawable.table_cell_background)
+              setPadding(0, 8, 0, 8)
+            }
+            // First column wraps, second column expands
+            tvField.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT)
+            tvValue.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
+            tr.addView(tvField)
+            tr.addView(tvValue)
+            table.addView(tr)
+          }
+        }
+    }
   }
 
   @Suppress("DEPRECATION")
