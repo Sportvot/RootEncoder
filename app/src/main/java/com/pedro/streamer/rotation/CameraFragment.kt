@@ -160,9 +160,11 @@ class CameraFragment: Fragment(), ConnectChecker {
       if (!genericStream.isStreaming) {
         genericStream.startStream(etUrl.text.toString())
         bStartStop.setImageResource(R.drawable.stream_stop_icon)
+        (activity as? RotationActivity)?.hideAppBar()
       } else {
         genericStream.stopStream()
         bStartStop.setImageResource(R.drawable.stream_icon)
+        (activity as? RotationActivity)?.showAppBar()
       }
     }
     bRecord.setOnClickListener {
@@ -436,6 +438,8 @@ class CameraFragment: Fragment(), ConnectChecker {
     } else {
       genericStream.stopStream()
       bStartStop.setImageResource(R.drawable.stream_icon)
+      // Show app bar when streaming fails
+      (activity as? RotationActivity)?.showAppBar()
       toast("Failed: $reason")
     }
   }
@@ -447,12 +451,16 @@ class CameraFragment: Fragment(), ConnectChecker {
 
   override fun onDisconnect() {
     txtBitrate.text = String()
+    // Show app bar when disconnected
+    (activity as? RotationActivity)?.showAppBar()
     toast("Disconnected")
   }
 
   override fun onAuthError() {
     genericStream.stopStream()
     bStartStop.setImageResource(R.drawable.stream_icon)
+    // Show app bar when auth error occurs
+    (activity as? RotationActivity)?.showAppBar()
     toast("Auth error")
   }
 

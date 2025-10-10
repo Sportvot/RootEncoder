@@ -388,4 +388,12 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
     }
     return false
   }
+
+  fun hideAppBar() {
+    supportActionBar?.hide()
+  }
+
+  fun showAppBar() {
+    supportActionBar?.show()
+  }
 }
