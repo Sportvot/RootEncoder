@@ -161,10 +161,12 @@ class CameraFragment: Fragment(), ConnectChecker {
         genericStream.startStream(etUrl.text.toString())
         bStartStop.setImageResource(R.drawable.stream_stop_icon)
         (activity as? RotationActivity)?.hideAppBar()
+        etUrl.visibility = View.GONE
       } else {
         genericStream.stopStream()
         bStartStop.setImageResource(R.drawable.stream_icon)
         (activity as? RotationActivity)?.showAppBar()
+        etUrl.visibility = View.VISIBLE
       }
     }
     bRecord.setOnClickListener {
@@ -267,6 +269,9 @@ class CameraFragment: Fragment(), ConnectChecker {
       }
       updateOverlayButtonHighlight()
     }
+
+    updateOverlayButtonHighlight()
+    updateScoringButtonHighlight()
 
   }
 
