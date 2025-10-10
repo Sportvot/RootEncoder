@@ -20,6 +20,7 @@
   <style name="Theme.NoActionBar.SafeArea" parent="Theme.AppCompat.DayNight.NoActionBar">
     <item name="android:windowTranslucentStatus">false</item>
     <item name="android:fitsSystemWindows">true</item>
+    <item name="colorPrimaryDark">@color/appColor</item>
   </style>
 </resources>
 

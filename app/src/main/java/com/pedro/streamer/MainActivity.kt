@@ -102,14 +102,14 @@ class MainActivity : AppCompatActivity() {
             val tr = TableRow(this@MainActivity)
             val tvField = TextView(this@MainActivity).apply {
               text = field
-              setTextColor(ContextCompat.getColor(this@MainActivity, R.color.black))
+              setTextColor(ContextCompat.getColor(this@MainActivity, R.color.white))
               gravity = android.view.Gravity.CENTER
               background = ContextCompat.getDrawable(this@MainActivity, R.drawable.table_cell_background)
               setPadding(0, 8, 0, 8)
             }
             val tvValue = TextView(this@MainActivity).apply {
               text = value
-              setTextColor(ContextCompat.getColor(this@MainActivity, R.color.black))
+              setTextColor(ContextCompat.getColor(this@MainActivity, R.color.white))
               gravity = android.view.Gravity.CENTER
               background = ContextCompat.getDrawable(this@MainActivity, R.drawable.table_cell_background)
               setPadding(0, 8, 0, 8)

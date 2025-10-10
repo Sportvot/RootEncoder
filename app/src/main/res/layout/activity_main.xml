@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@color/appColorLight"
     >
 
   <TextView
       android:id="@+id/tv_version"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textColor="@color/appColor"
+      android:textColor="@color/divider"
       android:textSize="12sp"
       android:layout_marginTop="@dimen/grid_2"
       android:layout_marginLeft="@dimen/grid_2"
@@ -44,7 +44,7 @@
         android:id="@+id/table_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/black">
+        android:background="@color/appColor">
       <TextView
           android:id="@+id/header_field"
           android:layout_width="wrap_content"

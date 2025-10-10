@@ -280,8 +280,8 @@ class CameraFragment: Fragment(), ConnectChecker {
       toggleOverlayButton.setBackgroundResource(R.drawable.button_highlight_background)
       toggleOverlayButton.alpha = 1.0f
     } else {
-      toggleOverlayButton.setBackgroundResource(0)
-      toggleOverlayButton.alpha = 0.6f
+      toggleOverlayButton.setBackgroundResource(R.drawable.white_rounded_border)
+      toggleOverlayButton.alpha = 0.75f
     }
   }
 
@@ -290,8 +290,8 @@ class CameraFragment: Fragment(), ConnectChecker {
       toggleScoringButton.setBackgroundResource(R.drawable.button_highlight_background)
       toggleScoringButton.alpha = 1.0f
     } else {
-      toggleScoringButton.setBackgroundResource(0)
-      toggleScoringButton.alpha = 0.6f
+      toggleScoringButton.setBackgroundResource(R.drawable.white_rounded_border)
+      toggleScoringButton.alpha = 0.75f
     }
   }
 
