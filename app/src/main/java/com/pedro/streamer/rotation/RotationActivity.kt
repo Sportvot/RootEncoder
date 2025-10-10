@@ -56,6 +56,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import androidx.lifecycle.lifecycleScope
+import com.pedro.streamer.studio.StudioConstants
 
 
 /**
@@ -92,7 +93,12 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
     val matchId = intent.getStringExtra(com.pedro.streamer.studio.StudioConstants.MATCH_ID_KEY)
     val refreshId = intent.getStringExtra(com.pedro.streamer.studio.StudioConstants.REFRESH_ID_KEY)
     val refreshToken = intent.getStringExtra(com.pedro.streamer.studio.StudioConstants.REFRESH_TOKEN_KEY)
-    Log.d("RotationActivity", "Received params -> matchId=$matchId, refreshId=$refreshId, refreshToken=${refreshToken?.let { if (it.length > 6) it.take(3)+"***"+it.takeLast(3) else it }}")
+
+    val args = Bundle()
+    args.putString(StudioConstants.MATCH_ID_KEY, matchId)
+    args.putString(StudioConstants.REFRESH_ID_KEY, refreshId)
+    args.putString(StudioConstants.REFRESH_TOKEN_KEY, refreshToken)
+    cameraFragment.arguments = args
 
     cameraFragment.viewLifecycleOwnerLiveData.observe(this) { owner ->
       if (owner != null) {

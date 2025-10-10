@@ -17,6 +17,7 @@
 package com.pedro.streamer.rotation
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +26,9 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -39,12 +43,14 @@ import com.pedro.library.base.recording.RecordController
 import com.pedro.library.generic.GenericStream
 import com.pedro.library.util.BitrateAdapter
 import com.pedro.streamer.R
+import com.pedro.streamer.studio.StudioConstants
 import com.pedro.streamer.utils.PathUtils
 import com.pedro.streamer.utils.toast
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.math.min
+import androidx.core.view.isVisible
 
 /**
  * Example code to stream using StreamBase. This is the recommend way to use the library.
@@ -109,6 +115,11 @@ class CameraFragment: Fragment(), ConnectChecker {
   }.apply {
     setMaxBitrate(maxBitrate)
   }
+
+  private var isOverlayVisible = true
+  private var isScoringVisible = true
+  private lateinit var toggleScoringButton: Button
+  private lateinit var toggleOverlayButton: Button
 
   @SuppressLint("ClickableViewAccessibility")
   override fun onCreateView(
@@ -184,6 +195,97 @@ class CameraFragment: Fragment(), ConnectChecker {
     updateCodecLabel()
     updateBitrateModeLabel()
     return view
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    val matchId = arguments?.getString(StudioConstants.MATCH_ID_KEY)
+    val refreshId = arguments?.getString(StudioConstants.REFRESH_ID_KEY)
+    val refreshToken = arguments?.getString(StudioConstants.REFRESH_TOKEN_KEY)
+
+    fun setupWebView(webView: WebView, url: String) {
+      webView.visibility = View.VISIBLE
+      webView.setBackgroundColor(Color.TRANSPARENT)
+      webView.webViewClient = WebViewClient()
+      webView.settings.apply {
+        javaScriptEnabled = true
+        domStorageEnabled = true
+        useWideViewPort = true
+        loadWithOverviewMode = true
+        setSupportZoom(true)
+        builtInZoomControls = true
+        displayZoomControls = false
+        mixedContentMode = android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+      }
+      android.webkit.WebView.setWebContentsDebuggingEnabled(true)
+      webView.loadUrl(url)
+    }
+
+    // Show scoring WebView on fragment open
+    val scoringQuery = listOfNotNull(
+      refreshId?.takeIf { it.isNotBlank() && it != "null" && it != "undefined" }?.let { "refreshId=$it" },
+      refreshToken?.takeIf { it.isNotBlank() && it != "null" && it != "undefined" }?.let { "refreshToken=$it" }
+    ).joinToString("&")
+
+    Log.d("SCORING URL LOG", refreshId ?: "")
+
+    val scoringUrl = "${StudioConstants.SCORING_OVERLAY_URL}/$matchId" + if (scoringQuery.isNotEmpty()) "?$scoringQuery" else ""
+    val scoringWebView = view.findViewById<WebView>(R.id.scoringWebView)
+    setupWebView(scoringWebView, scoringUrl)
+    isScoringVisible = true
+
+    // Show overlay WebView on fragment open
+    val overlayUrl = "${StudioConstants.OVERLAY_URL}/preview/$matchId"
+    val overlayWebView = view.findViewById<WebView>(R.id.overlayWebView)
+    setupWebView(overlayWebView, overlayUrl)
+    isOverlayVisible = true
+
+    toggleScoringButton = view.findViewById<Button>(R.id.toggleScoringButton)
+    toggleScoringButton.setOnClickListener {
+      if (scoringWebView.isVisible) {
+        scoringWebView.visibility = View.GONE
+        scoringWebView.loadUrl("about:blank")
+        isScoringVisible = false
+      } else {
+        setupWebView(scoringWebView, scoringUrl)
+        isScoringVisible = true
+      }
+      updateScoringButtonHighlight()
+    }
+
+    toggleOverlayButton = view.findViewById<Button>(R.id.toggleOverlayButton)
+    toggleOverlayButton.setOnClickListener {
+      if (overlayWebView.isVisible) {
+        overlayWebView.visibility = View.GONE
+        overlayWebView.loadUrl("about:blank")
+        isOverlayVisible = false
+      } else {
+        setupWebView(overlayWebView, overlayUrl)
+        isOverlayVisible = true
+      }
+      updateOverlayButtonHighlight()
+    }
+
+  }
+
+  private fun updateOverlayButtonHighlight() {
+    if (isOverlayVisible) {
+      toggleOverlayButton.setBackgroundResource(R.drawable.button_highlight_background)
+      toggleOverlayButton.alpha = 1.0f
+    } else {
+      toggleOverlayButton.setBackgroundResource(0)
+      toggleOverlayButton.alpha = 0.6f
+    }
+  }
+
+  private fun updateScoringButtonHighlight() {
+    if (isScoringVisible) {
+      toggleScoringButton.setBackgroundResource(R.drawable.button_highlight_background)
+      toggleScoringButton.alpha = 1.0f
+    } else {
+      toggleScoringButton.setBackgroundResource(0)
+      toggleScoringButton.alpha = 0.6f
+    }
   }
 
   fun setStreamUrl(url: String) {

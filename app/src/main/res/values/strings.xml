@@ -97,5 +97,7 @@
   <string name="bitrate_mode">Bitrate mode</string>
   <string name="bitrate_mode_vbr">VBR (variable)</string>
   <string name="bitrate_mode_cbr">CBR (constant)</string>
-
+  <!--Studio-->
+  <string name="toggle_overlay">Turn on/off overlay</string>
+  <string name="toggle_scoring">Turn on/off scoring</string>
 </resources>
