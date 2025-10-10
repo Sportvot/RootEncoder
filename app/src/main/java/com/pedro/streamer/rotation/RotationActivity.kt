@@ -88,7 +88,10 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.rotation_activity)
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    fitAppPadding()
+    
+    // Hide status bar for fullscreen camera experience
+    hideStatusBar()
+    // Remove fitAppPadding() to allow camera to extend into notch/cutout area
     // Log incoming session params from Intent extras
     val matchId = intent.getStringExtra(com.pedro.streamer.studio.StudioConstants.MATCH_ID_KEY)
     val refreshId = intent.getStringExtra(com.pedro.streamer.studio.StudioConstants.REFRESH_ID_KEY)
@@ -391,9 +394,57 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
 
   fun hideAppBar() {
     supportActionBar?.hide()
+    // Keep status bar hidden during streaming for fullscreen experience
   }
 
   fun showAppBar() {
     supportActionBar?.show()
+    showStatusBar() // Show status bar when accessing controls
+  }
+
+  private fun hideStatusBar() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      window.insetsController?.let { controller ->
+        controller.hide(android.view.WindowInsets.Type.statusBars() or android.view.WindowInsets.Type.navigationBars())
+        controller.systemBarsBehavior = android.view.WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+      }
+    } else {
+      @Suppress("DEPRECATION")
+      window.decorView.systemUiVisibility = (
+        View.SYSTEM_UI_FLAG_FULLSCREEN or
+        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+      )
+    }
+    
+    // Ensure content extends into cutout/notch area
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+      window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+    }
+  }
+
+  private fun showStatusBar() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      window.insetsController?.let { controller ->
+        controller.show(android.view.WindowInsets.Type.statusBars() or android.view.WindowInsets.Type.navigationBars())
+      }
+    } else {
+      @Suppress("DEPRECATION")
+      window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+    }
+    
+    // Restore normal cutout handling when showing status bar
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+      window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT
+    }
+  }
+
+  override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
+    super.onConfigurationChanged(newConfig)
+    // Re-apply fullscreen mode after rotation to ensure notch coverage
+    hideStatusBar()
   }
 }
