@@ -399,7 +399,7 @@ class RotationActivity : AppCompatActivity(), OnTouchListener {
 
   fun showAppBar() {
     supportActionBar?.show()
-    showStatusBar() // Show status bar when accessing controls
+    // showStatusBar() // Show status bar when accessing controls
   }
 
   private fun hideStatusBar() {
