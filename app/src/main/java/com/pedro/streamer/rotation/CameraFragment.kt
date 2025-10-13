@@ -279,11 +279,15 @@ class CameraFragment: Fragment(), ConnectChecker {
     updateOverlayButtonHighlight()
     updateScoringButtonHighlight()
     handleZoomControls(view)
+    setupTapToFocus()
 
     val micView = view.findViewById<ImageView>(R.id.b_mic)
     micView.setOnClickListener { handleAudio(it) }
 
-    setupTapToFocus()
+    val autoFocusButton = view.findViewById<ImageView>(R.id.b_auto_focus)
+    autoFocusButton.setOnClickListener {
+      handleAutoFocus(it)
+    }
   }
 
   private fun showFocusIndicator(x: Float, y: Float) {
@@ -323,6 +327,28 @@ class CameraFragment: Fragment(), ConnectChecker {
     }
   }
 
+  private fun handleAutoFocus(view: View) {
+    val cameraSource = genericStream.videoSource
+    val autoFocusButton = view as ImageView
+
+    when (cameraSource) {
+      is Camera1Source -> {
+        val enabled = cameraSource.isAutoFocusEnabled()
+        if (enabled) cameraSource.disableAutoFocus() else cameraSource.enableAutoFocus()
+        autoFocusButton.alpha = if (enabled) 0.5f else 1f
+      }
+      is Camera2Source -> {
+        val enabled = cameraSource.isAutoFocusEnabled()
+        if (enabled) cameraSource.disableAutoFocus() else cameraSource.enableAutoFocus()
+        autoFocusButton.alpha = if (enabled) 0.5f else 1f
+      }
+      is CameraXSource -> {
+        val enabled = cameraSource.isAutoFocusEnabled()
+        if (enabled) cameraSource.disableAutoFocus() else cameraSource.enableAutoFocus()
+        autoFocusButton.alpha = if (enabled) 0.5f else 1f
+      }
+    }
+  }
 
 
   private fun handleAudio(view: View) {

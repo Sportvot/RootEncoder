@@ -209,6 +209,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/b_mic"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/b_auto_focus" />
+
+    <ImageView
+        android:id="@+id/b_auto_focus"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:src="@drawable/ic_baseline_center_focus_strong_24"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/b_zoom"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@id/toggleOverlayButton" />
 
     <!-- 4️⃣ GFX -->
@@ -225,7 +236,7 @@
         android:background="@drawable/white_rounded_border"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/b_zoom"
+        app:layout_constraintStart_toEndOf="@id/b_auto_focus"
         app:layout_constraintEnd_toStartOf="@id/toggleScoringButton" />
 
     <!-- 5️⃣ Score -->
@@ -254,6 +265,7 @@
       android:visibility="gone"
       android:src="@drawable/ic_baseline_center_focus_strong_24"
       android:layout_gravity="center"
-      android:scaleType="centerInside"/>
+      android:scaleType="centerInside"
+      tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
