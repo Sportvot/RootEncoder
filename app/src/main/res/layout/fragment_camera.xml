@@ -162,112 +162,105 @@
   </androidx.constraintlayout.widget.ConstraintLayout>
 
   <androidx.constraintlayout.widget.ConstraintLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_margin="16dp"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_marginEnd="10dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintBottom_toBottomOf="parent">
 
-    <!-- 1️⃣ Record -->
+    <!-- 1️⃣ Record (start of vertical chain) -->
     <ImageView
         android:id="@+id/b_record"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:src="@drawable/record_icon"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/switch_camera"
-        android:visibility="gone"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/b_start_stop"
+        app:layout_constraintVertical_chainStyle="spread" />
 
-    <!-- 2️⃣ Switch Camera -->
-    <ImageView
-        android:id="@+id/switch_camera"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
-        android:src="@drawable/switch_icon"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/b_record"
-        app:layout_constraintEnd_toStartOf="@id/b_start_stop" />
-
-    <!-- 3️⃣ Stream (center) -->
+    <!-- 2️⃣ Stream (moved up) -->
     <ImageView
         android:id="@+id/b_start_stop"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:src="@drawable/stream_icon"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/switch_camera"
-        app:layout_constraintEnd_toStartOf="@id/b_mic" />
+        app:layout_constraintTop_toBottomOf="@id/b_record"
+        app:layout_constraintBottom_toTopOf="@id/switch_camera"
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- 3️⃣ Switch Camera (moved down) -->
+    <ImageView
+        android:id="@+id/switch_camera"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:src="@drawable/switch_icon"
+        app:layout_constraintTop_toBottomOf="@id/b_start_stop"
+        app:layout_constraintBottom_toTopOf="@id/b_mic"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 4️⃣ Mic -->
     <ImageView
         android:id="@+id/b_mic"
-        android:layout_width="44dp"
-        android:layout_height="40dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:src="@drawable/ic_baseline_mic_24"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/b_start_stop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/b_zoom" />
+        app:layout_constraintTop_toBottomOf="@id/switch_camera"
+        app:layout_constraintBottom_toTopOf="@id/b_zoom"
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- 5️⃣ Zoom -->
     <ImageView
         android:id="@+id/b_zoom"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:src="@drawable/ic_baseline_exposure_24"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/b_mic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/b_auto_focus" />
+        app:layout_constraintTop_toBottomOf="@id/b_mic"
+        app:layout_constraintBottom_toTopOf="@id/b_auto_focus"
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- 6️⃣ Auto Focus -->
     <ImageView
         android:id="@+id/b_auto_focus"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:src="@drawable/ic_baseline_center_focus_strong_24"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/b_zoom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/toggleOverlayButton" />
+        app:layout_constraintTop_toBottomOf="@id/b_zoom"
+        app:layout_constraintBottom_toTopOf="@id/toggleOverlayButton"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 4️⃣ GFX -->
+    <!-- 7️⃣ GFX -->
     <Button
         android:id="@+id/toggleOverlayButton"
         android:layout_width="54dp"
-        android:layout_height="37dp"
+        android:layout_height="35dp"
         android:text="GFX"
         android:textAllCaps="true"
         android:textColor="@android:color/white"
-        android:contentDescription="@string/toggle_overlay"
         android:gravity="center"
         android:alpha="0.75"
         android:background="@drawable/white_rounded_border"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/b_auto_focus"
-        app:layout_constraintEnd_toStartOf="@id/toggleScoringButton" />
+        app:layout_constraintTop_toBottomOf="@id/b_auto_focus"
+        app:layout_constraintBottom_toTopOf="@id/toggleScoringButton"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 5️⃣ Score -->
+    <!-- 8️⃣ Score -->
     <Button
         android:id="@+id/toggleScoringButton"
         android:layout_width="70dp"
-        android:layout_height="37dp"
+        android:layout_height="35dp"
         android:text="SCORE"
         android:textAllCaps="true"
         android:textColor="@android:color/white"
-        android:contentDescription="@string/toggle_overlay"
         android:gravity="center"
         android:alpha="0.75"
         android:background="@drawable/white_rounded_border"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toggleOverlayButton"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/toggleOverlayButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
   </androidx.constraintlayout.widget.ConstraintLayout>
 
   <ImageView
