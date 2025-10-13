@@ -47,12 +47,23 @@
       android:background="@drawable/gradient_overlay"
       app:layout_constraintTop_toTopOf="parent" />
 
+  <View
+      android:id="@+id/rightGradientOverlay"
+      android:layout_width="60dp"
+      android:layout_height="0dp"
+      android:background="@drawable/gradient_overlay_vertical"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" />
+
   <EditText
       android:id="@+id/et_rtp_url"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="10dp"
       android:layout_marginTop="40dp"
+      android:layout_marginEnd="70dp"
+      android:layout_marginStart="10dp"
       android:background="@drawable/edittext_rounded_bg"
       android:gravity="center"
       android:hint="@string/hint_protocol"
@@ -234,7 +245,7 @@
     <!-- 7️⃣ GFX -->
     <Button
         android:id="@+id/toggleOverlayButton"
-        android:layout_width="54dp"
+        android:layout_width="44dp"
         android:layout_height="35dp"
         android:text="GFX"
         android:textAllCaps="true"
@@ -256,6 +267,7 @@
         android:textColor="@android:color/white"
         android:gravity="center"
         android:alpha="0.75"
+        android:visibility="gone"
         android:background="@drawable/white_rounded_border"
         app:layout_constraintTop_toBottomOf="@id/toggleOverlayButton"
         app:layout_constraintBottom_toBottomOf="parent"
