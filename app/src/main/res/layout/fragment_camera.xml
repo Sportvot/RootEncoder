@@ -15,17 +15,29 @@
 
   <WebView
       android:id="@+id/overlayWebView"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:background="@android:color/transparent"
       android:visibility="visible"
-      android:background="@android:color/transparent" />
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintDimensionRatio="16:9"
+      app:layout_constraintHorizontal_bias="0.5" />
 
   <WebView
       android:id="@+id/scoringWebView"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
       android:background="@android:color/transparent"
-      android:visibility="visible" />
+      android:visibility="visible"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintDimensionRatio="16:9"
+      app:layout_constraintHorizontal_bias="0.5" />
 
   <!-- Gradient overlay for better text visibility -->
   <View
