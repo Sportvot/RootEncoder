@@ -247,4 +247,13 @@
         app:layout_constraintHorizontal_chainStyle="spread" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 
+  <ImageView
+      android:id="@+id/focusIndicator"
+      android:layout_width="80dp"
+      android:layout_height="80dp"
+      android:visibility="gone"
+      android:src="@drawable/ic_baseline_center_focus_strong_24"
+      android:layout_gravity="center"
+      android:scaleType="centerInside"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

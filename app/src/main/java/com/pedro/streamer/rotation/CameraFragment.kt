@@ -22,6 +22,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
@@ -30,10 +31,12 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.pedro.common.ConnectChecker
 import com.pedro.common.VideoCodec
@@ -277,10 +280,50 @@ class CameraFragment: Fragment(), ConnectChecker {
     updateScoringButtonHighlight()
     handleZoomControls(view)
 
-
     val micView = view.findViewById<ImageView>(R.id.b_mic)
     micView.setOnClickListener { handleAudio(it) }
+
+    setupTapToFocus()
   }
+
+  private fun showFocusIndicator(x: Float, y: Float) {
+    val indicator = view?.findViewById<ImageView>(R.id.focusIndicator) ?: return
+
+    indicator.translationX = x - indicator.width / 2
+    indicator.translationY = y - indicator.height / 2
+    indicator.visibility = View.VISIBLE
+    indicator.alpha = 1f
+
+    indicator.animate()
+      .alpha(0f)
+      .setDuration(800)
+      .withEndAction { indicator.visibility = View.GONE }
+      .start()
+  }
+
+  @SuppressLint("ClickableViewAccessibility")
+  private fun setupTapToFocus() {
+    val surfaceView = view?.findViewById<SurfaceView>(R.id.surfaceView) ?: return
+
+    surfaceView.setOnTouchListener { v, event ->
+      if (event.action == MotionEvent.ACTION_UP) {
+        val cameraSource = genericStream.videoSource
+        val focused = when (cameraSource) {
+          is Camera1Source -> cameraSource.tapToFocus(v, event)
+          is Camera2Source -> cameraSource.tapToFocus(v, event)
+          is CameraXSource -> cameraSource.tapToFocus(v, event)
+          else -> false
+        }
+
+        if (focused) {
+          showFocusIndicator(event.x, event.y)
+        }
+      }
+      true
+    }
+  }
+
+
 
   private fun handleAudio(view: View) {
     val source = genericStream.audioSource as MicrophoneSource
