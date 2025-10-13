@@ -3,6 +3,7 @@
   <color name="appColor">#1d0014</color>
   <color name="appColorLight">#4d193e</color>
   <color name="primary">#0082D5</color>
+  <color name="primaryTransparent">#400082D5</color>
   <color name="black">#000000</color>
   <color name="white">#ffffff</color>
   <color name="divider">#40ffffff</color>

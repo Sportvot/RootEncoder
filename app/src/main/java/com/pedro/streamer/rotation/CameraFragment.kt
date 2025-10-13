@@ -273,9 +273,15 @@ class CameraFragment: Fragment(), ConnectChecker {
 
     updateOverlayButtonHighlight()
     updateScoringButtonHighlight()
+    handleZoomControls(view)
+  }
 
-    // zoom controls
+  private fun handleZoomControls(view: View) {
     val zoomSeek = view.findViewById<SeekBar>(R.id.zoom_seekbar)
+
+    zoomSeek.visibility = View.GONE
+    zoomSeek.alpha = 0f
+
     zoomSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
       override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
         if (fromUser) {
@@ -305,6 +311,20 @@ class CameraFragment: Fragment(), ConnectChecker {
       override fun onStartTrackingTouch(seekBar: SeekBar?) {}
       override fun onStopTrackingTouch(seekBar: SeekBar?) {}
     })
+
+    val bZoom = view.findViewById<ImageView>(R.id.b_zoom)
+    bZoom.alpha = 0.5f
+    bZoom.setOnClickListener {
+      if (zoomSeek.isVisible) {
+        zoomSeek.animate().alpha(0f).setDuration(200).withEndAction { zoomSeek.visibility = View.GONE }
+        bZoom.alpha = 0.5f
+      } else {
+        zoomSeek.alpha = 0f
+        zoomSeek.visibility = View.VISIBLE
+        zoomSeek.animate().alpha(1f).setDuration(200)
+        bZoom.alpha = 1.0f
+      }
+    }
   }
 
   private fun updateOverlayButtonHighlight() {

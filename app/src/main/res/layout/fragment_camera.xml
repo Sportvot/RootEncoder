@@ -145,7 +145,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         android:layout_marginVertical="5dp"
-        android:layout_marginEnd="5dp"/>
+        android:layout_marginEnd="0dp"/>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -192,7 +192,7 @@
     <Button
         android:id="@+id/toggleOverlayButton"
         android:layout_width="54dp"
-        android:layout_height="40dp"
+        android:layout_height="37dp"
         android:text="GFX"
         android:textAllCaps="true"
         android:textColor="@android:color/white"
@@ -209,7 +209,7 @@
     <Button
         android:id="@+id/toggleScoringButton"
         android:layout_width="70dp"
-        android:layout_height="40dp"
+        android:layout_height="37dp"
         android:text="SCORE"
         android:textAllCaps="true"
         android:textColor="@android:color/white"
