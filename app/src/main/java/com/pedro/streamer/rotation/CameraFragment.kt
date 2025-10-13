@@ -31,6 +31,7 @@ import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -273,6 +274,37 @@ class CameraFragment: Fragment(), ConnectChecker {
     updateOverlayButtonHighlight()
     updateScoringButtonHighlight()
 
+    // zoom controls
+    val zoomSeek = view.findViewById<SeekBar>(R.id.zoom_seekbar)
+    zoomSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+      override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+        if (fromUser) {
+          val source = genericStream.videoSource
+          when (source) {
+            is Camera1Source -> {
+              val zoomRange = source.getZoomRange()
+              val newZoom = zoomRange.lower + (progress * (zoomRange.upper - zoomRange.lower) / seekBar!!.max)
+              source.setZoom(newZoom)
+              Log.d("CameraFragment", "Zoom In: $newZoom/${zoomRange.upper}")
+            }
+            is Camera2Source -> {
+              val zoomRange = source.getZoomRange()
+              val newZoom = zoomRange.lower + (progress * (zoomRange.upper - zoomRange.lower) / seekBar!!.max)
+              source.setZoom(newZoom)
+              Log.d("CameraFragment", "Zoom In: $newZoom/${zoomRange.upper}")
+            }
+            is CameraXSource -> {
+              val zoomRange = source.getZoomRange()
+              val newZoom = zoomRange.lower + (progress * (zoomRange.upper - zoomRange.lower) / seekBar!!.max)
+              source.setZoom(newZoom)
+              Log.d("CameraFragment", "Zoom In: $newZoom/${zoomRange.upper}")
+            }
+          }
+        }
+      }
+      override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+      override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+    })
   }
 
   private fun updateOverlayButtonHighlight() {
@@ -472,4 +504,5 @@ class CameraFragment: Fragment(), ConnectChecker {
   override fun onAuthSuccess() {
     toast("Auth success")
   }
+
 }
