@@ -26,9 +26,15 @@ import com.pedro.common.VideoCodec
 import com.pedro.common.onMainThreadHandler
 import com.pedro.encoder.input.sources.audio.AudioSource
 import com.pedro.encoder.input.sources.audio.MicrophoneSource
+import com.pedro.encoder.input.sources.video.Camera1Source
 import com.pedro.encoder.input.sources.video.Camera2Source
 import com.pedro.encoder.input.sources.video.VideoSource
+import com.pedro.library.base.Camera1Base
 import com.pedro.library.base.StreamBase
+import com.pedro.library.rtmp.RtmpCamera1
+import com.pedro.library.rtmp.RtmpCamera2
+import com.pedro.library.rtsp.RtspCamera1
+import com.pedro.library.rtsp.RtspCamera2
 import com.pedro.library.util.streamclient.GenericStreamClient
 import com.pedro.library.util.streamclient.RtmpStreamClient
 import com.pedro.library.util.streamclient.RtspStreamClient

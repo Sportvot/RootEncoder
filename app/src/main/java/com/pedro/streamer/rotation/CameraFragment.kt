@@ -52,6 +52,8 @@ import java.util.Date
 import java.util.Locale
 import kotlin.math.min
 import androidx.core.view.isVisible
+import com.pedro.encoder.input.sources.audio.MicrophoneSource
+import com.pedro.library.rtmp.RtmpCamera1
 
 /**
  * Example code to stream using StreamBase. This is the recommend way to use the library.
@@ -274,6 +276,27 @@ class CameraFragment: Fragment(), ConnectChecker {
     updateOverlayButtonHighlight()
     updateScoringButtonHighlight()
     handleZoomControls(view)
+
+
+    val micView = view.findViewById<ImageView>(R.id.b_mic)
+    micView.setOnClickListener { handleAudio(it) }
+  }
+
+  private fun handleAudio(view: View) {
+    val source = genericStream.audioSource as MicrophoneSource
+    val isMuted = source.isMuted()
+
+    val micView = view as ImageView
+
+    if (isMuted) {
+      source.unMute()
+      micView.setImageResource(R.drawable.ic_baseline_mic_24)
+      micView.alpha = 1.0f
+    } else {
+      source.mute()
+      micView.setImageResource(R.drawable.ic_baseline_mic_off_24)
+      micView.alpha = 0.5f
+    }
   }
 
   private fun handleZoomControls(view: View) {
