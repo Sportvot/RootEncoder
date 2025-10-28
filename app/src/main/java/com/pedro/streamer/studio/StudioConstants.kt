@@ -1,7 +1,7 @@
 package com.pedro.streamer.studio
 
 object StudioConstants {
-    private const val IS_TEST = true
+    private const val IS_TEST = false
 
     private const val MAIN_WEBVIEW_URL_TEST = "https://studio-test.sportvot.com"
     private const val MAIN_WEBVIEW_URL_PROD = "https://studio.sportvot.com"

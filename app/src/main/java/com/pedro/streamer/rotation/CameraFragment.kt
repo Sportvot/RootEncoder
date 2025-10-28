@@ -19,6 +19,8 @@ package com.pedro.streamer.rotation
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -54,6 +56,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.math.min
+import kotlin.math.max
 import androidx.core.view.isVisible
 import com.pedro.encoder.input.sources.audio.MicrophoneSource
 import com.pedro.library.rtmp.RtmpCamera1
@@ -98,7 +101,9 @@ class CameraFragment: Fragment(), ConnectChecker {
   private lateinit var surfaceView: SurfaceView
   private lateinit var bStartStop: ImageView
   private lateinit var txtBitrate: TextView
+  private lateinit var txtPacketLoss: TextView
   private lateinit var txtResolution: TextView
+  private lateinit var txtFps: TextView
   private lateinit var txtMinBitrate: TextView
   private lateinit var txtMaxBitrate: TextView
   private lateinit var txtCodec: TextView
@@ -127,6 +132,47 @@ class CameraFragment: Fragment(), ConnectChecker {
   private lateinit var toggleScoringButton: Button
   private lateinit var toggleOverlayButton: Button
 
+  // Packet loss sampling state (for short-term loss rate)
+  private var lastPacketsLost: Int = 0
+  private var lastLossSampleTimeMs: Long = 0L
+  private var isLossSampling: Boolean = false
+  private val lossHandler = Handler(Looper.getMainLooper())
+  private val lossSampler = object: Runnable {
+    override fun run() {
+      if (!isAdded) return
+      if (!genericStream.isStreaming) {
+        stopLossSampling()
+        return
+      }
+      val packetsLost = genericStream.getStreamClient().getPacketsLost()
+      val now = System.currentTimeMillis()
+      val recentDelta = if (lastLossSampleTimeMs != 0L) (packetsLost - lastPacketsLost).coerceAtLeast(0) else 0
+      lastLossSampleTimeMs = now
+      lastPacketsLost = packetsLost
+      // Show last-500ms loss count; color red if any loss in the window, otherwise white
+      txtPacketLoss.text = "Pkt Loss: $recentDelta"
+      if (recentDelta > 0) {
+        txtPacketLoss.setTextColor(Color.RED)
+      } else {
+        txtPacketLoss.setTextColor(Color.WHITE)
+      }
+      lossHandler.postDelayed(this, 500L)
+    }
+  }
+
+  private fun startLossSampling() {
+    if (isLossSampling) return
+    isLossSampling = true
+    lastLossSampleTimeMs = 0L
+    lossHandler.postDelayed(lossSampler, 500L)
+  }
+
+  private fun stopLossSampling() {
+    if (!isLossSampling) return
+    isLossSampling = false
+    lossHandler.removeCallbacks(lossSampler)
+  }
+
   @SuppressLint("ClickableViewAccessibility")
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -139,10 +185,12 @@ class CameraFragment: Fragment(), ConnectChecker {
 
     txtBitrate = view.findViewById(R.id.txt_bitrate)
     txtResolution = view.findViewById(R.id.txt_resolution)
+    txtFps = view.findViewById(R.id.txt_fps)
     txtMinBitrate = view.findViewById(R.id.txt_min_bitrate)
     txtMaxBitrate = view.findViewById(R.id.txt_max_bitrate)
     txtCodec = view.findViewById(R.id.txt_codec)
     txtBitrateMode = view.findViewById(R.id.txt_bitrate_mode)
+    txtPacketLoss = view.findViewById(R.id.txt_packet_loss)
     surfaceView = view.findViewById(R.id.surfaceView)
     (activity as? RotationActivity)?.let {
       surfaceView.setOnTouchListener(it)
@@ -168,11 +216,13 @@ class CameraFragment: Fragment(), ConnectChecker {
         bStartStop.setImageResource(R.drawable.stream_stop_icon)
         (activity as? RotationActivity)?.hideAppBar()
         etUrl.visibility = View.GONE
+        startLossSampling()
       } else {
         genericStream.stopStream()
         bStartStop.setImageResource(R.drawable.stream_icon)
         (activity as? RotationActivity)?.showAppBar()
         etUrl.visibility = View.VISIBLE
+        stopLossSampling()
       }
     }
     bRecord.setOnClickListener {
@@ -201,6 +251,8 @@ class CameraFragment: Fragment(), ConnectChecker {
       }
     }
     updateResolutionDisplay()
+    // Fixed FPS display
+    txtFps.text = "30 fps"
     updateBitrateLabels()
     updateCodecLabel()
     updateBitrateModeLabel()
@@ -572,6 +624,7 @@ class CameraFragment: Fragment(), ConnectChecker {
   override fun onDestroy() {
     super.onDestroy()
     genericStream.release()
+    stopLossSampling()
   }
 
   override fun onConnectionStarted(url: String) {
@@ -603,6 +656,7 @@ class CameraFragment: Fragment(), ConnectChecker {
     // Show app bar when disconnected
     (activity as? RotationActivity)?.showAppBar()
     toast("Disconnected")
+    stopLossSampling()
   }
 
   override fun onAuthError() {

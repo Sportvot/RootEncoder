@@ -83,13 +83,37 @@
       app:layout_constraintTop_toTopOf="parent" />
 
   <TextView
-      android:id="@+id/txt_resolution"
+      android:id="@+id/txt_packet_loss"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textColor="@android:color/white"
       android:textSize="12sp"
       android:layout_marginStart="16dp"
       app:layout_constraintStart_toEndOf="@id/txt_bitrate"
+      app:layout_constraintTop_toTopOf="@id/txt_bitrate"
+      app:layout_constraintBottom_toBottomOf="@id/txt_bitrate"
+      android:text="Pkt Loss: 0" />
+
+  <TextView
+      android:id="@+id/txt_fps"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@android:color/white"
+      android:textSize="12sp"
+      android:layout_marginStart="16dp"
+      app:layout_constraintStart_toEndOf="@id/txt_packet_loss"
+      app:layout_constraintTop_toTopOf="@id/txt_bitrate"
+      app:layout_constraintBottom_toBottomOf="@id/txt_bitrate"
+      android:text="30 fps" />
+
+  <TextView
+      android:id="@+id/txt_resolution"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@android:color/white"
+      android:textSize="12sp"
+      android:layout_marginStart="16dp"
+      app:layout_constraintStart_toEndOf="@id/txt_fps"
       app:layout_constraintTop_toTopOf="@id/txt_bitrate"
       app:layout_constraintBottom_toBottomOf="@id/txt_bitrate" />
 
@@ -135,6 +159,18 @@
       android:textSize="12sp"
       android:layout_marginStart="16dp"
       app:layout_constraintStart_toEndOf="@id/txt_codec"
+      app:layout_constraintTop_toTopOf="@id/txt_bitrate"
+      app:layout_constraintBottom_toBottomOf="@id/txt_bitrate" />
+
+  <TextView
+      android:id="@+id/txt_version"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@android:color/holo_green_light"
+      android:textSize="12sp"
+      android:layout_marginEnd="62dp"
+      android:text="v2.6.5"
+      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="@id/txt_bitrate"
       app:layout_constraintBottom_toBottomOf="@id/txt_bitrate" />
 
