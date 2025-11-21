@@ -36,7 +36,7 @@ class CommandManager {
   var host = ""
   //Avoid write a packet in middle of other.
   private val writeSync = Mutex(locked = false)
-  var videoCodec = VideoCodec.H264
+  var videoCodec = VideoCodec.H265
   var audioCodec = AudioCodec.AAC
 
   @Throws(IOException::class)

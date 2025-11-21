@@ -58,7 +58,7 @@ class CommandsManager {
   //Avoid write a packet in middle of other.
   private val writeSync = Mutex(locked = false)
   private var encryptor: EncryptionUtil? = null
-  var videoCodec = VideoCodec.H264
+  var videoCodec = VideoCodec.H265
   var audioCodec = AudioCodec.AAC
 
   fun setPassphrase(passphrase: String, type: EncryptionType) {

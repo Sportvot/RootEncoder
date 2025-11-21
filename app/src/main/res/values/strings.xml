@@ -1,11 +1,12 @@
 <resources>
-  <string name="app_name">RootEncoder streamer</string>
+  <string name="app_name">SV Studio</string>
   <string name="version">Version: %1$s</string>
   <!--Activities-->
   <string name="old_api">Old API (16 – 20)</string>
   <string name="from_file">From file</string>
   <string name="display">Screen</string>
   <string name="rotation_rtmp">Rotation\n(include filters)</string>
+  <string name="start_stream">Start Stream</string>
   <string name="tv_select">Select your streamer</string>
   <string name="hint_protocol">protocol://yourendpoint</string>
   <!--filters-->
@@ -72,5 +73,31 @@
   <string name="camera_uvc">CameraUVC</string>
   <string name="bitmap">Bitmap</string>
   <string name="buffer">Buffer</string>
-
+  <string name="resolution">Resolution</string>
+  <string name="resolution_480p">480p</string>
+  <string name="resolution_720p">720p</string>
+  <string name="resolution_1080p">1080p</string>
+  <string name="bitrate">Bitrate</string>
+  <string name="min_bitrate">Min bitrate</string>
+  <string name="max_bitrate">Max bitrate</string>
+  <string name="mbps_1">0.5 Mbps</string>
+  <string name="mbps_2">1 Mbps</string>
+  <string name="mbps_3">1.5 Mbps</string>
+  <string name="mbps_4">2 Mbps</string>
+  <string name="mbps_5">2.5 Mbps</string>
+  <string name="mbps_6">3 Mbps</string>
+  <string name="mbps_7">3.5 Mbps</string>
+  <string name="mbps_8">4 Mbps</string>
+  <string name="mbps_9">4.5 Mbps</string>
+  <string name="mbps_10">5 Mbps</string>
+  <string name="codec">Codec</string>
+  <string name="h264">H264</string>
+  <string name="h265">H265</string>
+  <string name="max_bitrate_auto">Auto (no max)</string>
+  <string name="bitrate_mode">Bitrate mode</string>
+  <string name="bitrate_mode_vbr">VBR (variable)</string>
+  <string name="bitrate_mode_cbr">CBR (constant)</string>
+  <!--Studio-->
+  <string name="toggle_overlay">Turn on/off overlay</string>
+  <string name="toggle_scoring">Turn on/off scoring</string>
 </resources>

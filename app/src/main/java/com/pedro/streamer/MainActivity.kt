@@ -26,16 +26,31 @@ import android.os.Bundle
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.GridView
 import android.widget.TextView
+import android.widget.TableLayout
+import android.widget.TableRow
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
 import com.pedro.streamer.file.FromFileActivity
 import com.pedro.streamer.oldapi.OldApiActivity
 import com.pedro.streamer.rotation.RotationActivity
 import com.pedro.streamer.screen.ScreenActivity
+import com.pedro.streamer.studio.DeepLinkParams
 import com.pedro.streamer.utils.ActivityLink
 import com.pedro.streamer.utils.ImageAdapter
+import android.util.Log
+import androidx.core.content.ContextCompat
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
+import com.pedro.streamer.studio.StudioConstants
+import com.pedro.streamer.utils.dataStore
 import com.pedro.streamer.utils.fitAppPadding
 import com.pedro.streamer.utils.toast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.collectLatest
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,14 +68,61 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+
+    // Parse deep link parameters
+    handleDeepLink(intent)
+
     fitAppPadding()
     transitionAnim(true)
     val tvVersion = findViewById<TextView>(R.id.tv_version)
     tvVersion.text = getString(R.string.version, BuildConfig.VERSION_NAME)
+    val table = findViewById<TableLayout>(R.id.table_datastore)
     list = findViewById(R.id.list)
     createList()
     setListAdapter(activities)
     requestPermissions()
+
+    // Observe DataStore and show current values
+    lifecycleScope.launch(Dispatchers.Main) {
+      applicationContext.dataStore.data
+        .map { prefs ->
+          listOf(
+            "Resolution" to (prefs[stringPreferencesKey("video_resolution_key")] ?: "-"),
+            "FPS" to (prefs[stringPreferencesKey("video_fps_key")] ?: "-"),
+            "SRT IP" to (prefs[stringPreferencesKey("srt_server_ip_key")] ?: "-"),
+            "SRT Port" to (prefs[stringPreferencesKey("srt_server_port_key")] ?: "-"),
+            "Stream ID" to (prefs[stringPreferencesKey("server_stream_id_key")] ?: "-"),
+            "Bitrate" to ((prefs[intPreferencesKey("live_video_bitrate_key")]?.toString()) ?: "-")
+          )
+        }
+        .collectLatest { rows ->
+          // Clear previous content except header (index 0)
+          while (table.childCount > 1) table.removeViewAt(1)
+          rows.forEach { (field, value) ->
+            val tr = TableRow(this@MainActivity)
+            val tvField = TextView(this@MainActivity).apply {
+              text = field
+              setTextColor(ContextCompat.getColor(this@MainActivity, R.color.white))
+              gravity = android.view.Gravity.CENTER
+              background = ContextCompat.getDrawable(this@MainActivity, R.drawable.table_cell_background)
+              setPadding(0, 8, 0, 8)
+            }
+            val tvValue = TextView(this@MainActivity).apply {
+              text = value
+              setTextColor(ContextCompat.getColor(this@MainActivity, R.color.white))
+              gravity = android.view.Gravity.CENTER
+              background = ContextCompat.getDrawable(this@MainActivity, R.drawable.table_cell_background)
+              setPadding(0, 8, 0, 8)
+            }
+            // First column wraps, second column expands
+            tvField.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT)
+            tvValue.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
+            tr.addView(tvField)
+            tr.addView(tvValue)
+            table.addView(tr)
+          }
+        }
+    }
   }
 
   @Suppress("DEPRECATION")
@@ -83,26 +145,8 @@ class MainActivity : AppCompatActivity() {
   private fun createList() {
     activities.add(
       ActivityLink(
-        Intent(this, OldApiActivity::class.java),
-        getString(R.string.old_api), VERSION_CODES.JELLY_BEAN
-      )
-    )
-    activities.add(
-      ActivityLink(
-        Intent(this, FromFileActivity::class.java),
-        getString(R.string.from_file), VERSION_CODES.JELLY_BEAN_MR2
-      )
-    )
-    activities.add(
-      ActivityLink(
-        Intent(this, ScreenActivity::class.java),
-        getString(R.string.display), VERSION_CODES.LOLLIPOP
-      )
-    )
-    activities.add(
-      ActivityLink(
         Intent(this, RotationActivity::class.java),
-        getString(R.string.rotation_rtmp), VERSION_CODES.LOLLIPOP
+        getString(R.string.start_stream), VERSION_CODES.LOLLIPOP
       )
     )
   }
@@ -115,6 +159,15 @@ class MainActivity : AppCompatActivity() {
           val link = activities[position]
           val minSdk = link.minSdk
           if (Build.VERSION.SDK_INT >= minSdk) {
+            // Attach deep link/session params when navigating to RotationActivity
+            val params = DeepLinkParams.fromUri(intent.data)
+            val matchId = params.matchId ?: intent.getStringExtra(StudioConstants.MATCH_ID_KEY)
+            val refreshId = params.refreshId ?: intent.getStringExtra(StudioConstants.REFRESH_ID_KEY)
+            val refreshToken = params.refreshToken ?: intent.getStringExtra(StudioConstants.REFRESH_TOKEN_KEY)
+            Log.d("MainActivity_TOKENS", "Passing params -> matchId=$matchId, refreshId=$refreshId, refreshToken=${refreshToken?.let { if (it.length > 6) it.take(3)+"***"+it.takeLast(3) else it }}")
+            matchId?.let { link.intent.putExtra(StudioConstants.MATCH_ID_KEY, it) }
+            refreshId?.let { link.intent.putExtra(StudioConstants.REFRESH_ID_KEY, it) }
+            refreshToken?.let { link.intent.putExtra(StudioConstants.REFRESH_TOKEN_KEY, it) }
             startActivity(link.intent)
             transitionAnim(false)
           } else {
@@ -151,5 +204,19 @@ class MainActivity : AppCompatActivity() {
       }
     }
     return true
+  }
+
+  private fun handleDeepLink(intent: Intent?) {
+    val params = DeepLinkParams.fromUri(intent?.data)
+    lifecycleScope.launch(Dispatchers.IO) {
+      applicationContext.dataStore.edit { prefs ->
+        params.resolution?.let { prefs[stringPreferencesKey("video_resolution_key")] = it }
+        params.fps?.let { prefs[stringPreferencesKey("video_fps_key")] = it }
+        params.ip?.let { prefs[stringPreferencesKey("srt_server_ip_key")] = it }
+        params.port?.let { prefs[stringPreferencesKey("srt_server_port_key")] = it }
+        params.srtStreamId?.let { prefs[stringPreferencesKey("server_stream_id_key")] = it }
+        params.bitrate?.let { prefs[intPreferencesKey("live_video_bitrate_key")] = it }
+      }
+    }
   }
 }

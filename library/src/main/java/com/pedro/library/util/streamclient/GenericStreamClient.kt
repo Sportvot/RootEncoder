@@ -208,6 +208,11 @@ class GenericStreamClient(
     udpClient.resetBytesSend()
   }
 
+  /**
+   * Packets lost reported by SRT NAK. Only meaningful when connected via SRT, otherwise 0.
+   */
+  fun getPacketsLost(): Int = if (connectedStreamClient === srtClient) srtClient.getPacketsLost() else 0
+
   override fun setOnlyAudio(onlyAudio: Boolean) {
     rtmpClient.setOnlyAudio(onlyAudio)
     rtspClient.setOnlyAudio(onlyAudio)

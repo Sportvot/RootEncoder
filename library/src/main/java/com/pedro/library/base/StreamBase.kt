@@ -634,5 +634,15 @@ abstract class StreamBase(
   }
 
   protected abstract fun setVideoCodecImp(codec: VideoCodec)
+
+  /**
+   * Prefer CBR encoders when available, otherwise fall back to VBR.
+   * Must be called before prepareVideo to take effect.
+   */
+  fun setPreferCbr(prefer: Boolean) {
+    videoEncoder.setPreferCbr(prefer)
+    videoEncoderRecord.setPreferCbr(prefer)
+  }
+
   protected abstract fun setAudioCodecImp(codec: AudioCodec)
 }

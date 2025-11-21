@@ -5,40 +5,82 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@color/appColorLight"
     >
 
   <TextView
       android:id="@+id/tv_version"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textColor="@color/appColor"
+      android:textColor="@color/divider"
       android:textSize="12sp"
       android:layout_marginTop="@dimen/grid_2"
       android:layout_marginLeft="@dimen/grid_2"
       android:layout_marginRight="@dimen/grid_2"
       />
-  <TextView
-      android:id="@+id/tv_select"
-      android:layout_width="wrap_content"
+<!--  <TextView-->
+<!--      android:id="@+id/tv_select"-->
+<!--      android:layout_width="wrap_content"-->
+<!--      android:layout_height="wrap_content"-->
+<!--      android:layout_marginTop="@dimen/grid_2"-->
+<!--      android:layout_marginLeft="@dimen/grid_2"-->
+<!--      android:layout_marginRight="@dimen/grid_2"-->
+<!--      android:text="@string/tv_select"-->
+<!--      android:textColor="@color/appColor"-->
+<!--      android:textSize="22sp"-->
+<!--      />-->
+
+  <TableLayout
+      android:id="@+id/table_datastore"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/grid_2"
+      android:layout_marginTop="@dimen/grid_1"
       android:layout_marginLeft="@dimen/grid_2"
       android:layout_marginRight="@dimen/grid_2"
-      android:text="@string/tv_select"
-      android:textColor="@color/appColor"
-      android:textSize="22sp"
-      />
+      android:stretchColumns="1">
+
+    <!-- Header row; cells will be styled/populated in code to ensure consistency -->
+    <TableRow
+        android:id="@+id/table_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/appColor">
+      <TextView
+          android:id="@+id/header_field"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Field"
+          android:textStyle="bold"
+          android:textColor="@color/white"
+          android:gravity="center"
+          android:background="@drawable/table_cell_background"
+          android:paddingTop="8dp"
+          android:paddingBottom="8dp"/>
+      <TextView
+          android:id="@+id/header_value"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="Value"
+          android:textStyle="bold"
+          android:textColor="@color/white"
+          android:gravity="center"
+          android:background="@drawable/table_cell_background"
+          android:paddingTop="8dp"
+          android:paddingBottom="8dp"/>
+    </TableRow>
+
+  </TableLayout>
 
   <GridView
       android:id="@+id/list"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="@dimen/grid_1"
-      android:columnWidth="40dp"
+      android:columnWidth="80dp"
       android:gravity="center"
       android:horizontalSpacing="@dimen/grid_2"
-      android:numColumns="2"
+      android:numColumns="1"
       android:padding="@dimen/grid_2"
       android:stretchMode="columnWidth"
       android:verticalSpacing="@dimen/grid_2"

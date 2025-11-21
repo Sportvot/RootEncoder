@@ -64,9 +64,9 @@ class ScreenService: Service(), ConnectChecker {
     applicationContext.getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
   }
   private var callback: ConnectChecker? = null
-  private val width = 640
-  private val height = 480
-  private val vBitrate = 1200 * 1000
+  private val width = 1280
+  private val height = 720
+  private val vBitrate = 4000 * 1000
   private var rotation = 90 //0 for landscape or 90 for portrait
   private val sampleRate = 32000
   private val isStereo = true

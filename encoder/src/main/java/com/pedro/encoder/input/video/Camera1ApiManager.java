@@ -454,7 +454,7 @@ public class Camera1ApiManager implements Camera.PreviewCallback, Camera.FaceDet
     } else if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_720P)) {
       return camera.new Size(1280, 720);
     } else {
-      return camera.new Size(640, 480);
+      return camera.new Size(1280, 720);
     }
   }
 

@@ -49,7 +49,7 @@ class ImageAdapter(private val links: List<ActivityLink>) : BaseAdapter() {
       button = TextView(parent.context)
       button.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize)
       button.setTextColor(ResourcesCompat.getColor(resources, R.color.white, null))
-      button.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.appColor, null))
+      button.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.primary, null))
       button.layoutParams = AbsListView.LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.WRAP_CONTENT

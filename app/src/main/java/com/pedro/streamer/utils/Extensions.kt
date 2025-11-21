@@ -36,12 +36,17 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.datastore.preferences.preferencesDataStore
 import com.pedro.streamer.R
 
 
 /**
  * Created by pedro on 1/3/24.
  */
+
+val Context.dataStore by preferencesDataStore(
+  name = "settings"
+)
 
 fun Activity.toast(message: String, duration: Int = Toast.LENGTH_SHORT) {
   Toast.makeText(this, message, duration).show()

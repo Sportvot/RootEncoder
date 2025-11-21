@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_example_rtmp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/appColor">
 
   <SurfaceView
       android:layout_width="match_parent"
@@ -11,66 +13,307 @@
       android:id="@+id/surfaceView"
       />
 
+  <WebView
+      android:id="@+id/overlayWebView"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:background="@android:color/transparent"
+      android:visibility="visible"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintDimensionRatio="16:9"
+      app:layout_constraintHorizontal_bias="0.5" />
+
+  <WebView
+      android:id="@+id/scoringWebView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@android:color/transparent"
+      android:visibility="visible"
+     />
+
+  <!-- Gradient overlay for better text visibility -->
+  <View
+      android:id="@+id/gradientOverlay"
+      android:layout_width="match_parent"
+      android:layout_height="40dp"
+      android:background="@drawable/gradient_overlay"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <View
+      android:id="@+id/rightGradientOverlay"
+      android:layout_width="60dp"
+      android:layout_height="0dp"
+      android:background="@drawable/gradient_overlay_vertical"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" />
+
   <EditText
-      android:hint="@string/hint_protocol"
-      android:textColor="@color/appColor"
-      android:textColorHint="@color/appColor"
-      android:inputType="textUri"
+      android:id="@+id/et_rtp_url"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_marginHorizontal="10dp"
+      android:layout_marginTop="40dp"
+      android:layout_marginEnd="70dp"
+      android:layout_marginStart="10dp"
+      android:background="@drawable/edittext_rounded_bg"
       android:gravity="center"
-      android:layout_margin="20dp"
-      android:id="@+id/et_rtp_url"
+      android:hint="@string/hint_protocol"
+      android:inputType="textUri"
+      android:paddingTop="2.5dp"
+      android:paddingBottom="4dp"
+      android:textColor="@color/lightText"
+      android:textColorHint="@android:color/white"
+      app:circularflow_defaultRadius="10dp"
       app:layout_constraintTop_toTopOf="parent"
-      />
+      tools:layout_editor_absoluteX="10dp" />
 
   <TextView
       android:id="@+id/txt_bitrate"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textColor="@color/appColor"
+      android:textColor="@android:color/white"
+      android:textSize="12sp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="10dp"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
-  <androidx.constraintlayout.widget.ConstraintLayout
-      android:layout_width="match_parent"
+  <TextView
+      android:id="@+id/txt_packet_loss"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:textColor="@android:color/white"
+      android:textSize="12sp"
+      android:layout_marginStart="16dp"
+      app:layout_constraintStart_toEndOf="@id/txt_bitrate"
+      app:layout_constraintTop_toTopOf="@id/txt_bitrate"
+      app:layout_constraintBottom_toBottomOf="@id/txt_bitrate"
+      android:text="Pkt Loss: 0" />
+
+  <TextView
+      android:id="@+id/txt_fps"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@android:color/white"
+      android:textSize="12sp"
+      android:layout_marginStart="16dp"
+      app:layout_constraintStart_toEndOf="@id/txt_packet_loss"
+      app:layout_constraintTop_toTopOf="@id/txt_bitrate"
+      app:layout_constraintBottom_toBottomOf="@id/txt_bitrate"
+      android:text="30 fps" />
+
+  <TextView
+      android:id="@+id/txt_resolution"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@android:color/white"
+      android:textSize="12sp"
+      android:layout_marginStart="16dp"
+      app:layout_constraintStart_toEndOf="@id/txt_fps"
+      app:layout_constraintTop_toTopOf="@id/txt_bitrate"
+      app:layout_constraintBottom_toBottomOf="@id/txt_bitrate" />
+
+  <TextView
+      android:id="@+id/txt_min_bitrate"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@android:color/white"
+      android:textSize="12sp"
+      android:layout_marginStart="16dp"
+      app:layout_constraintStart_toEndOf="@id/txt_resolution"
+      app:layout_constraintTop_toTopOf="@id/txt_bitrate"
+      app:layout_constraintBottom_toBottomOf="@id/txt_bitrate" />
+
+  <TextView
+      android:id="@+id/txt_max_bitrate"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@android:color/white"
+      android:textSize="12sp"
+      android:layout_marginStart="16dp"
+      android:visibility="gone"
+      app:layout_constraintStart_toEndOf="@id/txt_min_bitrate"
+      app:layout_constraintTop_toTopOf="@id/txt_bitrate"
+      app:layout_constraintBottom_toBottomOf="@id/txt_bitrate" />
+
+  <TextView
+      android:id="@+id/txt_codec"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@android:color/white"
+      android:textSize="12sp"
+      android:layout_marginStart="16dp"
+      app:layout_constraintStart_toEndOf="@id/txt_max_bitrate"
+      app:layout_constraintTop_toTopOf="@id/txt_bitrate"
+      app:layout_constraintBottom_toBottomOf="@id/txt_bitrate" />
+
+  <TextView
+      android:id="@+id/txt_bitrate_mode"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@android:color/white"
+      android:textSize="12sp"
+      android:layout_marginStart="16dp"
+      app:layout_constraintStart_toEndOf="@id/txt_codec"
+      app:layout_constraintTop_toTopOf="@id/txt_bitrate"
+      app:layout_constraintBottom_toBottomOf="@id/txt_bitrate" />
+
+  <TextView
+      android:id="@+id/txt_version"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@android:color/holo_green_light"
+      android:textSize="12sp"
+      android:layout_marginEnd="62dp"
+      android:text="v2.6.5"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@id/txt_bitrate"
+      app:layout_constraintBottom_toBottomOf="@id/txt_bitrate" />
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="wrap_content"
+      android:layout_height="0dp"
       app:layout_constraintBottom_toBottomOf="parent"
-      android:layout_margin="16dp"
-      >
-    <ImageView
-        android:src="@drawable/record_icon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:id="@+id/b_record"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/b_start_stop"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        />
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintHeight_default="percent"
+      app:layout_constraintHeight_percent="0.65">
 
-    <ImageView
-        android:src="@drawable/stream_icon"
-        android:layout_width="98dp"
-        android:layout_height="98dp"
-        android:id="@+id/b_start_stop"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/b_record"
-        app:layout_constraintEnd_toStartOf="@id/switch_camera"
-        />
-
-    <ImageView
-        android:src="@drawable/switch_icon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:id="@+id/switch_camera"
-        app:layout_constraintTop_toTopOf="parent"
+    <SeekBar
+        android:id="@+id/zoom_seekbar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:backgroundTint="@color/divider"
+        android:max="100"
+        android:progressTint="@android:color/white"
+        android:progressBackgroundTint="@color/divider"
+        android:rotation="270"
+        android:splitTrack="false"
+        android:thumbTint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/b_start_stop"
-        />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        android:layout_marginVertical="5dp"
+        android:layout_marginEnd="0dp"/>
+
   </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_marginEnd="10dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent">
+
+    <!-- 1️⃣ Record (start of vertical chain) -->
+    <ImageView
+        android:id="@+id/b_record"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/record_icon"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/b_start_stop"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <!-- 2️⃣ Stream (moved up) -->
+    <ImageView
+        android:id="@+id/b_start_stop"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:src="@drawable/stream_icon"
+        app:layout_constraintTop_toBottomOf="@id/b_record"
+        app:layout_constraintBottom_toTopOf="@id/switch_camera"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 3️⃣ Switch Camera (moved down) -->
+    <ImageView
+        android:id="@+id/switch_camera"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:src="@drawable/switch_icon"
+        app:layout_constraintTop_toBottomOf="@id/b_start_stop"
+        app:layout_constraintBottom_toTopOf="@id/b_mic"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 4️⃣ Mic -->
+    <ImageView
+        android:id="@+id/b_mic"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/ic_baseline_mic_24"
+        app:layout_constraintTop_toBottomOf="@id/switch_camera"
+        app:layout_constraintBottom_toTopOf="@id/b_zoom"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 5️⃣ Zoom -->
+    <ImageView
+        android:id="@+id/b_zoom"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/ic_baseline_exposure_24"
+        app:layout_constraintTop_toBottomOf="@id/b_mic"
+        app:layout_constraintBottom_toTopOf="@id/b_auto_focus"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 6️⃣ Auto Focus -->
+    <ImageView
+        android:id="@+id/b_auto_focus"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/ic_baseline_center_focus_strong_24"
+        app:layout_constraintTop_toBottomOf="@id/b_zoom"
+        app:layout_constraintBottom_toTopOf="@id/toggleOverlayButton"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 7️⃣ GFX -->
+    <Button
+        android:id="@+id/toggleOverlayButton"
+        android:layout_width="50dp"
+        android:layout_height="35dp"
+        android:text="GFX"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:alpha="0.75"
+        android:background="@drawable/white_rounded_border"
+        app:layout_constraintTop_toBottomOf="@id/b_auto_focus"
+        app:layout_constraintBottom_toTopOf="@id/toggleScoringButton"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 8️⃣ Score -->
+    <Button
+        android:id="@+id/toggleScoringButton"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:text="SCORE"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:alpha="0.75"
+        android:visibility="gone"
+        android:background="@drawable/white_rounded_border"
+        app:layout_constraintTop_toBottomOf="@id/toggleOverlayButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <ImageView
+      android:id="@+id/focusIndicator"
+      android:layout_width="80dp"
+      android:layout_height="80dp"
+      android:visibility="gone"
+      android:src="@drawable/ic_baseline_center_focus_strong_24"
+      android:layout_gravity="center"
+      android:scaleType="centerInside"
+      tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
